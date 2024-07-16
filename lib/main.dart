@@ -87,7 +87,6 @@ Future<void> setupAppData() async {
   final FlutterSecureStorage secureStorage = getIt.get<FlutterSecureStorage>();
   final String? _appDataKey = await secureStorage.read(key: 'appDataKey');
   List<int> appDataKey;
-  String test;
   if (_appDataKey != null) {
     appDataKey = List<int>.from(jsonDecode(_appDataKey));
   } else {
