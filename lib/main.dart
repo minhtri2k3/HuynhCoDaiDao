@@ -169,8 +169,7 @@ void main() async {
         providers: [
           BlocProvider<AuthenticationBloc>(
             create: (BuildContext context) {
-              final UserRepository userRepository = getIt<UserRepository>();
-              return AuthenticationBloc(userRepository: userRepository)
+              return AuthenticationBloc(userRepository: getIt())
                 ..add(AuthenticationStarted());
             },
           ),
@@ -180,11 +179,7 @@ void main() async {
             },
           ),
         ],
-        child: ScreenUtilInit(
-          designSize: Size(1080, 1920), // Adjust this based on your design specs
-          minTextAdapt: true,
-          builder: (context , child) => MyApp(),
-        )
+        child: MyApp()
       ),
     ),
   );

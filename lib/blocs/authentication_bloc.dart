@@ -10,13 +10,11 @@ import 'package:huynhcodaidaover2/blocs/authentication_state.dart';
 
 import 'package:huynhcodaidaover2/repositories/user_repository.dart';
 
-final GetIt getIt = GetIt.instance;
-
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final UserRepository _userRepository = getIt.get<UserRepository>();
+  final UserRepository userRepository;
 
-  AuthenticationBloc({required UserRepository userRepository})
+  AuthenticationBloc({required this.userRepository})
       : super(AuthenticationInitial()) {
     on<AuthenticationStarted>(_onAuthenticationStarted);
     on<AuthenticationLoggedIn>(_onAuthenticationLoggedIn);
@@ -28,7 +26,7 @@ class AuthenticationBloc
   ) async {
     emit(AuthenticationInProgress());
     try {
-      final UserToken? userToken = await _userRepository.getToken();
+      final UserToken? userToken = await userRepository.getToken();
       await Future.delayed(Duration(seconds: 3));
       if (userToken != null) {
         emit(AuthenticationSuccess());
@@ -45,7 +43,7 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     emit(AuthenticationInProgress());
-    await _userRepository.putToken(event.userToken);
+    await userRepository.putToken(event.userToken);
     emit(AuthenticationSuccess());
   }
 
@@ -54,7 +52,7 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     emit(AuthenticationInProgress());
-    await _userRepository.deleteToken();
+    await userRepository.deleteToken();
     emit(AuthenticationFailure());
   }
 }
