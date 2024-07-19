@@ -26,10 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar01Widget(
-            height: 160,
+            height: 32,
           ),
           body: Container(
-            child: MenuWidget(),
+            child: Center(child: Text('Home')),
           ),
           bottomNavigationBar: Container(
             height: 180,

@@ -19,22 +19,23 @@ class AppBar01Widget extends StatelessWidget implements PreferredSizeWidget {
       height: height,
       child: Center(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
-              child: Icon(
-                Icons.home,
-                color: Colors.white,
-                size: 80,
-              ),
+            Icon(
+              Icons.home,
+              color: Colors.white,
+              size: 16,
             ),
+            const SizedBox(width: 8),
             Text(
               'HUỲNH CƠ ĐẠI ĐẠO TAM KỲ',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: GoogleFonts.robotoSlab(
                 color: Colors.white,
-                fontSize: 50,
+                fontSize: 10,
                 fontWeight: FontWeight.bold,
               ),
             ),

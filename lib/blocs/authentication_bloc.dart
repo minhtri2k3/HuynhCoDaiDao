@@ -1,14 +1,10 @@
 import 'dart:async';
-
-import 'package:get_it/get_it.dart';
 import 'package:bloc/bloc.dart';
 
-import 'package:huynhcodaidaover2/models/user_token.dart';
-
-import 'package:huynhcodaidaover2/blocs/authentication_event.dart';
-import 'package:huynhcodaidaover2/blocs/authentication_state.dart';
-
-import 'package:huynhcodaidaover2/repositories/user_repository.dart';
+import '../models/user_token.dart';
+import '../repositories/user_repository.dart';
+import 'authentication_event.dart';
+import 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
