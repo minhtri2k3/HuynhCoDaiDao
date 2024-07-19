@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:flutter/foundation.dart';
@@ -61,26 +62,37 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 final GetIt getIt = GetIt.instance;
 
 Future<void> setupGetIt() async {
-  getIt.registerLazySingleton<FlutterSecureStorage>(() => FlutterSecureStorage());
+  getIt.registerLazySingleton<FlutterSecureStorage>(
+      () => FlutterSecureStorage());
 
   final FluroRouter router = FluroRouter();
   getIt.registerLazySingleton<FluroRouter>(() => router);
 
   getIt.registerLazySingleton<UserService>(() => UserService(Dio()));
   getIt.registerLazySingleton<MenuService>(() => MenuService(Dio()));
-  getIt.registerLazySingleton<PhotoAlbumCollectionService>(() => PhotoAlbumCollectionService(Dio()));
-  getIt.registerLazySingleton<AudioAlbumCollectionService>(() => AudioAlbumCollectionService(Dio()));
-  getIt.registerLazySingleton<PhotoAlbumService>(() => PhotoAlbumService(Dio()));
-  getIt.registerLazySingleton<AudioAlbumService>(() => AudioAlbumService(Dio()));
- // test Github
+  getIt.registerLazySingleton<PhotoAlbumCollectionService>(
+      () => PhotoAlbumCollectionService(Dio()));
+  getIt.registerLazySingleton<AudioAlbumCollectionService>(
+      () => AudioAlbumCollectionService(Dio()));
+  getIt
+      .registerLazySingleton<PhotoAlbumService>(() => PhotoAlbumService(Dio()));
+  getIt
+      .registerLazySingleton<AudioAlbumService>(() => AudioAlbumService(Dio()));
+  // test Github
   getIt.registerLazySingleton<UserRepository>(() => UserRepository());
   getIt.registerLazySingleton<MenuRepository>(() => MenuRepository());
-  getIt.registerLazySingleton<PhotoAlbumCollectionRepository>(() => PhotoAlbumCollectionRepository());
-  getIt.registerLazySingleton<AudioAlbumCollectionRepository>(() => AudioAlbumCollectionRepository());
-  getIt.registerLazySingleton<PhotoAlbumRepository>(() => PhotoAlbumRepository());
-  getIt.registerLazySingleton<AudioAlbumRepository>(() => AudioAlbumRepository());
-  getIt.registerLazySingleton<MessageCategoryService>(() => MessageCategoryService(Dio()));
-  getIt.registerLazySingleton<MessageCategoryRepository>(() => MessageCategoryRepository());
+  getIt.registerLazySingleton<PhotoAlbumCollectionRepository>(
+      () => PhotoAlbumCollectionRepository());
+  getIt.registerLazySingleton<AudioAlbumCollectionRepository>(
+      () => AudioAlbumCollectionRepository());
+  getIt.registerLazySingleton<PhotoAlbumRepository>(
+      () => PhotoAlbumRepository());
+  getIt.registerLazySingleton<AudioAlbumRepository>(
+      () => AudioAlbumRepository());
+  getIt.registerLazySingleton<MessageCategoryService>(
+      () => MessageCategoryService(Dio()));
+  getIt.registerLazySingleton<MessageCategoryRepository>(
+      () => MessageCategoryRepository());
 }
 
 Future<void> setupAppData() async {
@@ -153,12 +165,13 @@ void main() async {
   runApp(
     DevicePreview(
       enabled: false, // !kReleaseMode,
-      builder: (BuildContext context) => MultiBlocProvider(
+      builder: ( context) => MultiBlocProvider(
         providers: [
           BlocProvider<AuthenticationBloc>(
             create: (BuildContext context) {
               final UserRepository userRepository = getIt<UserRepository>();
-              return AuthenticationBloc(userRepository: userRepository)..add(AuthenticationStarted());
+              return AuthenticationBloc(userRepository: userRepository)
+                ..add(AuthenticationStarted());
             },
           ),
           BlocProvider<AudioControllerBloc>(
@@ -167,7 +180,11 @@ void main() async {
             },
           ),
         ],
-        child: MyApp(),
+        child: ScreenUtilInit(
+          designSize: Size(1080, 1920), // Adjust this based on your design specs
+          minTextAdapt: true,
+          builder: (context , child) => MyApp(),
+        )
       ),
     ),
   );
@@ -177,18 +194,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: DevicePreview.appBuilder,
       onGenerateRoute: getIt<FluroRouter>().generator,
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, AuthenticationState state) {
+        builder: (context, state) {
           Widget home = SplashScreen();
-
           if (state is AuthenticationSuccess) {
             home = HomeScreen();
           } else if (state is AuthenticationFailure) {
-            final AuthenticationBloc authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+            final AuthenticationBloc authenticationBloc =
+                BlocProvider.of<AuthenticationBloc>(context);
             home = BlocProvider(
-              create: (context) => LoginScreenBloc(authenticationBloc: authenticationBloc),
+              create: (context) =>
+                  LoginScreenBloc(authenticationBloc: authenticationBloc),
               child: LoginScreen(),
             );
           }

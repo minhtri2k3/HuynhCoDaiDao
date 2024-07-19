@@ -29,6 +29,7 @@ dependencies:
   get_it: ^7.7.0
   flutter_secure_storage: ^9.2.2
   device_preview: ^1.2.0
+  flutter_screenutil: ^5.9.3
   #  responsive_widgets: ^2.0.1
   hive: ^2.0.4
   hive_flutter: ^1.1.0

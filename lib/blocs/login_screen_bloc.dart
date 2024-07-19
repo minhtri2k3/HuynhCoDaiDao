@@ -20,31 +20,55 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
 
   LoginScreenBloc({
     required this.authenticationBloc,
-  })  : assert(authenticationBloc != null),
-        super(LoginScreenInitial());
+  }) : super(LoginScreenInitial()) {
+    on<LoginScreenObscureOptionTapped>(_LoginScreenObscureOptionTapped);
+    on<LoginScreenLoginButtonPressed>(_LoginScreenLoginButtonPressed);
+  }
+  Future<void> _LoginScreenObscureOptionTapped(
+    LoginScreenObscureOptionTapped event,
+    Emitter<LoginScreenState> emit,
+  ) async {
+    emit(LoginScreenObscureOptionChanged(obscureOption: !event.obscureOption));
+  }
 
-  @override
-  Stream<LoginScreenState> mapEventToState(LoginScreenEvent event) async* {
-    if (event is LoginScreenObscureOptionTapped) {
-      yield LoginScreenObscureOptionChanged(
-        obscureOption: !event.obscureOption,
+  Future<void> _LoginScreenLoginButtonPressed(
+    LoginScreenLoginButtonPressed event,
+    Emitter<LoginScreenState> emit,
+  ) async {
+    emit(LoginScreenInProgress());
+    try {
+      final userToken = await _userRepository.authenticate(
+        username: event.username,
+        password: event.password,
       );
-    }
-
-    if (event is LoginScreenLoginButtonPressed) {
-      yield LoginScreenInProgress();
-
-      try {
-        final userToken = await _userRepository.authenticate(
-          username: event.username,
-          password: event.password,
-        );
-
-        authenticationBloc.add(AuthenticationLoggedIn(userToken: userToken));
-        yield LoginScreenSuccess();
-      } catch (error) {
-        yield LoginScreenFailure(error: error);
-      }
+      authenticationBloc.add(AuthenticationLoggedIn(userToken: userToken));
+      emit(LoginScreenSuccess());
+    } catch (e) {
+      emit(LoginScreenFailure(error: e));
     }
   }
+  // @override
+  // Stream<LoginScreenState> mapEventToState(LoginScreenEvent event) async* {
+  //   if (event is LoginScreenObscureOptionTapped) {
+  //     yield LoginScreenObscureOptionChanged(
+  //       obscureOption: !event.obscureOption,
+  //     );
+  //   }
+  //
+  //   if (event is LoginScreenLoginButtonPressed) {
+  //     yield LoginScreenInProgress();
+  //
+  //     try {
+  //       final userToken = await _userRepository.authenticate(
+  //         username: event.username,
+  //         password: event.password,
+  //       );
+  //
+  //       authenticationBloc.add(AuthenticationLoggedIn(userToken: userToken));
+  //       yield LoginScreenSuccess();
+  //     } catch (error) {
+  //       yield LoginScreenFailure(error: error);
+  //     }
+  //   }
+  // }
 }

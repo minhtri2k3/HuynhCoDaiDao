@@ -17,7 +17,6 @@ class AuthenticationStarted extends AuthenticationEvent {}
 
 class AuthenticationLoggedIn extends AuthenticationEvent {
   final UserToken userToken;
-
   const AuthenticationLoggedIn({required this.userToken});
 
   @override
