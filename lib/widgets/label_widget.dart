@@ -12,10 +12,9 @@ class LabelWidget extends StatefulWidget {
   final String labelUrl;
 
   const LabelWidget({
-    required Key key,
+    Key? key,
     required this.labelUrl,
-  })  : assert(labelUrl != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _LabelWidgetState createState() => _LabelWidgetState();

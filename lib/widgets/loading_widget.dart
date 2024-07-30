@@ -5,7 +5,7 @@ class LoadingWidget extends StatelessWidget {
   final double height;
 
   const LoadingWidget({
-    required Key key,
+     Key? key,
     required this.height,
   })  : super(key: key);
 

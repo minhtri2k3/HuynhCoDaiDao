@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'package:huynhcodaidaover2/models/audio_album_collection.dart';
+import '../models/audio_album_collection.dart';
 
 part 'audio_album_collection_service.g.dart';
 

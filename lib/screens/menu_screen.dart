@@ -17,7 +17,6 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      key: ValueKey('MenuScreen'),
       title: actionTitle,
       body: MenuWidget(
         actionUrl: actionUrl,

@@ -1,21 +1,17 @@
-import 'package:meta/meta.dart';
-import 'package:hive/hive.dart';
-
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:huynhcodaidaover2/models/banner.dart';
+import 'package:huynhcodaidaover2/models/user_token.dart';
+import 'package:huynhcodaidaover2/services/router_service.dart';
 import 'package:shimmer/shimmer.dart';
 
-import 'package:huynhcodaidaover2/models/user_token.dart';
-import 'package:huynhcodaidaover2/models/banner.dart' as BannerModel;
-
-import 'package:huynhcodaidaover2/services/router_service.dart';
-
 class BannerWidget extends StatefulWidget {
-  final BannerModel.Banner banner;
+  final Banner banner;
   final EdgeInsetsGeometry margin;
 
   const BannerWidget({
-    required Key key,
+     Key? key,
     required this.banner,
     required this.margin,
   }) : super(key: key);
@@ -29,7 +25,7 @@ class _BannerWidgetState extends State<BannerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final BannerModel.Banner banner = widget.banner;
+    final Banner banner = widget.banner ;
     final EdgeInsetsGeometry margin = widget.margin;
     final Container marginWidget = Container(
       margin: margin,
@@ -49,7 +45,7 @@ class _BannerWidgetState extends State<BannerWidget> {
         'Authorization':
             'Bearer ' + (_appData.get('userToken') as UserToken).accessToken,
       },
-      imageUrl: banner.url,
+      imageUrl: banner.url!,
       imageBuilder: (BuildContext context, ImageProvider imageProvider) {
         return GestureDetector(
           onTap: () {
@@ -59,9 +55,9 @@ class _BannerWidgetState extends State<BannerWidget> {
 
             RouterService.navigateTo(
               context: context,
-              actionUrl: banner.actionUrl,
-              actionTypeName: banner.actionTypeName,
-              actionTitle: banner.actionTitle,
+              actionUrl: banner.actionUrl!,
+              actionTypeName: banner.actionTypeName!,
+              actionTitle: banner.actionTitle!,
             );
           },
           child: Container(

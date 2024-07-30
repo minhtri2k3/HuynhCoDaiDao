@@ -8,13 +8,13 @@ class Banner {
   int id;
 
   @JsonKey(name: 'title')
-  String title;
+  String? title;
 
   @JsonKey(name: 'slug')
-  String slug;
+  String? slug;
 
   @JsonKey(name: 'url')
-  String url;
+  String? url;
 
   @JsonKey(name: 'width')
   double width;
@@ -23,24 +23,24 @@ class Banner {
   double height;
 
   @JsonKey(name: 'action_title')
-  String actionTitle;
+  String? actionTitle;
 
   @JsonKey(name: 'action_url')
-  String actionUrl;
+  String? actionUrl;
 
   @JsonKey(name: 'action_type_name')
-  String actionTypeName;
+  String? actionTypeName;
 
   Banner({
     required this.id,
-    required this.title,
-    required this.slug,
-    required this.url,
+    this.title,
+    this.slug,
+    this.url,
     required this.width,
     required this.height,
-    required this.actionTitle,
-    required this.actionUrl,
-    required this.actionTypeName,
+    this.actionTitle,
+    this.actionUrl,
+    this.actionTypeName,
   });
 
   factory Banner.fromJson(Map<String, dynamic> json) => _$BannerFromJson(json);

@@ -11,35 +11,34 @@ class Menu {
   int id;
 
   @JsonKey(name: 'title')
-  String title;
+  String? title;
 
   @JsonKey(name: 'slug')
-  String slug;
+  String? slug;
 
   @JsonKey(name: 'default_icon_url')
-  String defaultIconUrl;
+  String? defaultIconUrl;
 
   @JsonKey(name: 'bell_url')
-  String bellUrl;
+  String? bellUrl;
 
   @JsonKey(name: 'hot_album_url')
-  String hotAlbumUrl;
-
+  String ?hotAlbumUrl;
   @JsonKey(name: 'banner')
-  Banner banner;
+  Banner? banner;
 
   @JsonKey(name: 'menu_items')
-  MenuItemList menuItemList;
+  MenuItemList? menuItemList;
 
   Menu({
     required this.id,
-    required this.title,
-    required this.slug,
-    required this.defaultIconUrl,
-    required this.bellUrl,
-    required this.hotAlbumUrl,
-    required this.banner,
-    required this.menuItemList,
+    this.title,
+    this.slug,
+    this.defaultIconUrl,
+    this.bellUrl,
+    this.hotAlbumUrl,
+    this.banner,
+    this.menuItemList,
   });
 
   factory Menu.fromJson(Map<String, dynamic> json) => _$MenuFromJson(json);

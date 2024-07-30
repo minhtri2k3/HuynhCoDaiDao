@@ -8,43 +8,43 @@ class MenuItem {
   int id;
 
   @JsonKey(name: 'title')
-  String title;
+  String? title;
 
   @JsonKey(name: 'slug')
-  String slug;
+  String? slug;
 
   @JsonKey(name: 'description')
-  String description;
+  String? description;
 
   @JsonKey(name: 'primary_icon_url')
-  String primaryIconUrl;
+  String? primaryIconUrl;
 
   @JsonKey(name: 'secondary_icon_url')
-  String secondaryIconUrl;
+  String? secondaryIconUrl;
 
   @JsonKey(name: 'label_url')
-  String labelUrl;
+  String? labelUrl;
 
   @JsonKey(name: 'action_title')
-  String actionTitle;
+  String? actionTitle;
 
   @JsonKey(name: 'action_url')
-  String actionUrl;
+  String? actionUrl;
 
   @JsonKey(name: 'action_type_name')
-  String actionTypeName;
+  String? actionTypeName;
 
   MenuItem({
     required this.id,
-    required this.title,
-    required this.slug,
-    required this.description,
-    required this.primaryIconUrl,
-    required this.secondaryIconUrl,
-    required this.labelUrl,
-    required this.actionTitle,
-    required this.actionUrl,
-    required this.actionTypeName,
+    this.title,
+    this.slug,
+    this.description,
+    this.primaryIconUrl,
+    this.secondaryIconUrl,
+    this.labelUrl,
+    this.actionTitle,
+    this.actionUrl,
+    this.actionTypeName,
   });
 
   factory MenuItem.fromJson(Map<String, dynamic> json) =>

@@ -1,7 +1,6 @@
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:huynhcodaidaover2/models/user_token.dart';
+import '../models/user_token.dart';
 
 abstract class AuthenticationEvent extends Equatable {
   const AuthenticationEvent();

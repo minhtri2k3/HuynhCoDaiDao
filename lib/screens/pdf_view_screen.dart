@@ -21,7 +21,6 @@ class PdfViewScreen extends StatelessWidget {
       document: PdfDocument.openAsset('assets/test.pdf'),
     );
     return BaseScreen(
-      key: ValueKey('PdfViewScreen'),
       title: actionTitle,
       body: PdfView(
         controller: pdfController,

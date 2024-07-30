@@ -8,15 +8,17 @@ part of 'menu.dart';
 
 Menu _$MenuFromJson(Map<String, dynamic> json) => Menu(
       id: (json['id'] as num).toInt(),
-      title: json['title'] as String,
-      slug: json['slug'] as String,
-      defaultIconUrl: json['default_icon_url'] as String,
-      bellUrl: json['bell_url'] as String,
-      hotAlbumUrl: json['hot_album_url'] as String,
-      banner: Banner.fromJson(json['banner'] as Map<String, dynamic>),
-      menuItemList:
-          MenuItemList.fromJson(json['menu_items'] as Map<String, dynamic>),
-    );
+      title: json['title'] as String?,
+      slug: json['slug'] as String?,
+      defaultIconUrl: json['default_icon_url'] as String?,
+      bellUrl: json['bell_url'] as String?,
+      hotAlbumUrl: json['hot_album_url'] as String?,
+      banner: json['banner'] == null
+          ? null
+          : Banner.fromJson(json['banner'] as Map<String, dynamic>),
+    )..menuItemList = json['menu_items'] == null
+        ? null
+        : MenuItemList.fromJson(json['menu_items'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$MenuToJson(Menu instance) => <String, dynamic>{
       'id': instance.id,

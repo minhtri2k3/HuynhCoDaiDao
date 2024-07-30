@@ -59,6 +59,7 @@ import 'package:huynhcodaidaover2/screens/pdf_view_screen.dart';
 
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
+
 final GetIt getIt = GetIt.instance;
 
 Future<void> setupGetIt() async {
@@ -67,8 +68,8 @@ Future<void> setupGetIt() async {
 
   final FluroRouter router = FluroRouter();
   getIt.registerLazySingleton<FluroRouter>(() => router);
-
   getIt.registerLazySingleton<UserService>(() => UserService(Dio()));
+  // getIt.registerLazySingleton<UserService>(() => UserService(Dio()));
   getIt.registerLazySingleton<MenuService>(() => MenuService(Dio()));
   getIt.registerLazySingleton<PhotoAlbumCollectionService>(
       () => PhotoAlbumCollectionService(Dio()));
@@ -165,22 +166,19 @@ void main() async {
   runApp(
     DevicePreview(
       enabled: false, // !kReleaseMode,
-      builder: ( context) => MultiBlocProvider(
-        providers: [
-          BlocProvider<AuthenticationBloc>(
-            create: (BuildContext context) {
-              return AuthenticationBloc(userRepository: getIt())
-                ..add(AuthenticationStarted());
-            },
-          ),
-          BlocProvider<AudioControllerBloc>(
-            create: (BuildContext context) {
-              return AudioControllerBloc()..add(AudioControllerHide());
-            },
-          ),
-        ],
-        child: MyApp()
-      ),
+      builder: (context) => MultiBlocProvider(providers: [
+        BlocProvider<AuthenticationBloc>(
+          create: (BuildContext context) {
+            return AuthenticationBloc(userRepository: getIt())
+              ..add(AuthenticationStarted());
+          },
+        ),
+        BlocProvider<AudioControllerBloc>(
+          create: (BuildContext context) {
+            return AudioControllerBloc()..add(AudioControllerHide());
+          },
+        ),
+      ], child: MyApp()),
     ),
   );
 }
@@ -199,7 +197,8 @@ class MyApp extends StatelessWidget {
             home = HomeScreen();
           } else if (state is AuthenticationFailure) {
             final AuthenticationBloc authenticationBloc =
-                BlocProvider.of<AuthenticationBloc>(context);
+                context.read<AuthenticationBloc>();
+            // BlocProvider.of<AuthenticationBloc>(context);
             home = BlocProvider(
               create: (context) =>
                   LoginScreenBloc(authenticationBloc: authenticationBloc),

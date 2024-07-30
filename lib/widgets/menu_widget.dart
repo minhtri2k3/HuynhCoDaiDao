@@ -1,86 +1,115 @@
-import 'package:get_it/get_it.dart';
-
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import 'package:huynhcodaidaover2/models/menu_item.dart';
-import 'package:huynhcodaidaover2/models/menu_item_list.dart';
-import 'package:huynhcodaidaover2/models/menu.dart';
-import 'package:huynhcodaidaover2/models/banner.dart' as BannerModel;
+import '../models/banner.dart' as BannerModel;
+import '../models/menu.dart';
+import '../models/menu_item.dart';
+import '../models/menu_item_list.dart';
+import '../models/testing_menu.dart';
+import '../repositories/menu_repository.dart';
 
-import 'package:huynhcodaidaover2/widgets/network_image_widget.dart';
-import 'package:huynhcodaidaover2/widgets/banner_widget.dart';
-import 'package:huynhcodaidaover2/widgets/loading_widget.dart';
-import 'package:huynhcodaidaover2/widgets/label_widget.dart';
-
-import 'package:huynhcodaidaover2/repositories/menu_repository.dart';
-
-import 'package:huynhcodaidaover2/services/router_service.dart';
+import '../repositories/user_repository.dart';
+import '../services/router_service.dart';
+import 'banner_widget.dart';
+import 'label_widget.dart';
+import 'loading_widget.dart';
+import 'network_image_widget.dart';
 
 final GetIt getIt = GetIt.instance;
 
 class MenuWidget extends StatefulWidget {
   final String actionUrl;
-
   const MenuWidget({
+    Key? key,
     this.actionUrl = '/app/menu/danh-muc-chinh',
-  });
+  }) : super(key: key);
 
   @override
   State createState() => _MenuWidgetState();
 }
 
 class _MenuWidgetState extends State<MenuWidget> {
+  static const _pageSize = 20;
   final MenuRepository _menuRepository = getIt.get<MenuRepository>();
-
-  dynamic _state;
-  late Future<Menu> _menuFuture;
-  late Menu _menu;
-  late MenuItemList _menuItemList;
-  late List<MenuItem> _menuItems;
-  late BannerModel.Banner _banner;
-  int _page = 1;
-  bool _shouldLoad = false;
-
+  late UserRepository _userRepository = getIt.get<UserRepository>();
+  final PagingController<int, MenuItem> _pagingController =
+      PagingController(firstPageKey: 1);
+  final ScrollController _scrollController = ScrollController();
+  Banner? _banner;
   @override
   void initState() {
-
-    _menuFuture = _menuRepository.get(
-      path: widget.actionUrl,
-    );
-
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchMenuList(pageKey);
+    });
     super.initState();
+  }
+  Future < void > _fetchBanner() async{
+
+  }
+  Future<void> _fetchMenuList(int pageKey) async {
+    try {
+      final menu =
+          await _menuRepository.get(path: widget.actionUrl, page: pageKey);
+      _banner = menu.banner;
+      final itemsMenuList = menu.menuItemList;
+      final itemsMenuListData = itemsMenuList?.data;
+      final nextPageKey = pageKey;
+      if (itemsMenuList!.to == itemsMenuList.total) {
+        _pagingController.appendLastPage(itemsMenuListData!);
+      } else {
+        final nextPageKey = pageKey + 1;
+        _pagingController.appendPage(itemsMenuListData!, nextPageKey);
+      }
+    } catch (e) {
+      _pagingController.error = e;
+      print("Error with the fetchPage");
+      print(e);
+    }
   }
 
   @override
   void dispose() {
-
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _menuFuture,
-      builder: (BuildContext context, AsyncSnapshot<Menu> snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: SpinKitFadingCircle(
-              size: 120,
-              color: Colors.amber,
+    return Container(
+      child: Column(
+        children: [
+          BannerWidget(
+            banner: _banner,
+            margin: EdgeInsets.only(
+              bottom: 16,
             ),
-          );
-        }
-         return Scaffold(
-           body: Container(
-             child: Text('This is the menu'),
-           ),
-         );
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: PagedListView<int, MenuItem>(
+              pagingController: _pagingController,
+              builderDelegate: PagedChildBuilderDelegate<MenuItem>(
+                transitionDuration: const Duration( seconds: 2),
+                itemBuilder: (BuildContext context, MenuItem item, int index) =>Container(
+                  child: Column(
+                    children: [
+                      Text('The id of each menuItem is ${item.id}'),
+                      SizedBox(height: 3),
+                      Text('The title is ${item.title}'),
+                    ],
+                  ),
+                ),
 
 
+              ),
+            ),
+          ),
+        ],
+      ),
 
-      },
     );
   }
 }

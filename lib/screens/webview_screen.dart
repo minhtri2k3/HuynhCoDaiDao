@@ -31,7 +31,7 @@ class _WebviewScreenState extends State<WebviewScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      key : ValueKey('WebviewScreen'),
+
       title: widget.actionTitle, body: Container( child: Text('This is the webview'),),
 
     );

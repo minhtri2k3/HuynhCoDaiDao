@@ -19,7 +19,6 @@ class PhotoAlbumCollectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      key : ValueKey('PhotoAlbumCollectionScreen'),
       title: actionTitle,
       body: PhotoAlbumCollectionWidget(
 

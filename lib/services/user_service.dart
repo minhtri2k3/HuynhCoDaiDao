@@ -14,7 +14,7 @@ abstract class UserService {
     @Field('grant_type') String grantType = 'password',
     @Field('client_id') int clientId = 2,
     @Field('client_secret')
-        String clientSecret = 'zhxanQ6no1sP6NNYJtjhuGrDmgHbNpUxNKSisQbu',
+    String clientSecret = 'zhxanQ6no1sP6NNYJtjhuGrDmgHbNpUxNKSisQbu',
     @Field('username')  required String username,
     @Field('password') required String password,
     @Field('scope') String scope = '',

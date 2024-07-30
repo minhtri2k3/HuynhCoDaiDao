@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
-import 'package:huynhcodaidaover2/ui_components/linear_gradients.dart';
+import '../ui_components/linear_gradients.dart';
 
-import 'package:huynhcodaidaover2/widgets/app_bar_01_widget.dart';
-import 'package:huynhcodaidaover2/widgets/menu_widget.dart';
+import '../widgets/app_bar_01_widget.dart';
+import '../widgets/menu_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -18,7 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradients.main,
@@ -29,24 +28,24 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 32,
           ),
           body: Container(
-            child: Center(child: Text('Home')),
+            child: MenuWidget(),
           ),
           bottomNavigationBar: Container(
-            height: 180,
+            height: 90,
             child: BottomNavigationBar(
               currentIndex: _currentIndex,
               type: BottomNavigationBarType.fixed,
               backgroundColor: Colors.white.withAlpha(240),
               selectedIconTheme: IconThemeData(
-                size: 78,
+                size: 32,
               ),
               selectedItemColor: Colors.red,
-              selectedFontSize: 38,
+              selectedFontSize: 16,
               unselectedIconTheme: IconThemeData(
-                size: 78,
+                size: 32,
               ),
               unselectedItemColor: Colors.black45,
-              unselectedFontSize: 38,
+              unselectedFontSize: 16,
               items: [
                 BottomNavigationBarItem(
                   icon: new Icon(Icons.home),
@@ -81,5 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+
   }
+
 }

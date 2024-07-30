@@ -8,14 +8,14 @@ part of 'banner.dart';
 
 Banner _$BannerFromJson(Map<String, dynamic> json) => Banner(
       id: (json['id'] as num).toInt(),
-      title: json['title'] as String,
-      slug: json['slug'] as String,
-      url: json['url'] as String,
+      title: json['title'] as String?,
+      slug: json['slug'] as String?,
+      url: json['url'] as String?,
       width: (json['width'] as num).toDouble(),
       height: (json['height'] as num).toDouble(),
-      actionTitle: json['action_title'] as String,
-      actionUrl: json['action_url'] as String,
-      actionTypeName: json['action_type_name'] as String,
+      actionTitle: json['action_title'] as String?,
+      actionUrl: json['action_url'] as String?,
+      actionTypeName: json['action_type_name'] as String?,
     );
 
 Map<String, dynamic> _$BannerToJson(Banner instance) => <String, dynamic>{

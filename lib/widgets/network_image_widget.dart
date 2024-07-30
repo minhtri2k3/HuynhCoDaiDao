@@ -8,15 +8,13 @@ import 'package:huynhcodaidaover2/models/user_token.dart';
 
 class NetworkImageWidget extends StatefulWidget {
   final String source;
-  final Map<String, String> headers;
   final double width;
   final double height;
   final BoxFit fit;
 
   const NetworkImageWidget({
-    required Key key,
+    Key? key,
     required this.source,
-    required this.headers,
     required this.width,
     required this.height,
     required this.fit,
@@ -28,13 +26,13 @@ class NetworkImageWidget extends StatefulWidget {
 
 class _NetworkImageWidgetState extends State<NetworkImageWidget> {
   final Box _appData = Hive.box('appData');
-
+  late final   Map<String, String> headers;
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: widget.source,
-      httpHeaders: widget.headers != null
-          ? widget.headers
+      httpHeaders: headers != null
+          ? headers
           : {
               'Authorization': 'Bearer ' +
                   (_appData.get('userToken') as UserToken).accessToken,

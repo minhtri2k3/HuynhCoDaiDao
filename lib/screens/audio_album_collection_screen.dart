@@ -16,7 +16,6 @@ class AudioAlbumCollectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      key: ValueKey('AudioAlbumCollectionScreen'),
       title: actionTitle,
       body: AudioAlbumCollectionWidget(
         key: ValueKey('AudioAlbumCollectionWidget'),

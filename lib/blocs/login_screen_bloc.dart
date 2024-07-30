@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:get_it/get_it.dart';
 import 'package:bloc/bloc.dart';
+import 'package:get_it/get_it.dart';
 
-import 'authentication_event.dart';
+import '../repositories/user_repository.dart';
 import 'authentication_bloc.dart';
+import 'authentication_event.dart';
 import 'login_screen_event.dart';
 import 'login_screen_state.dart';
-import '../repositories/user_repository.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -39,6 +39,10 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
         username: event.username,
         password: event.password,
       );
+      print('The username is ${event.username}');
+      print('The password is ${event.password}');
+      print('The token is ${userToken.accessToken}');
+      print('Expired in ${userToken.expiresIn}');
       authenticationBloc.add(AuthenticationLoggedIn(userToken: userToken));
       emit(LoginScreenSuccess());
     } catch (e) {

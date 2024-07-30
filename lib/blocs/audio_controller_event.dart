@@ -1,8 +1,7 @@
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:huynhcodaidaover2/models/audio_album.dart';
-import 'package:huynhcodaidaover2/models/audio_album_item.dart';
+import '../models/audio_album.dart';
+import '../models/audio_album_item.dart';
 
 abstract class AudioControllerEvent extends Equatable {
   const AudioControllerEvent();

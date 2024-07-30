@@ -25,19 +25,19 @@ class MenuItemList {
   int to;
 
   @JsonKey(name: 'path')
-  String path;
+  String? path;
 
   @JsonKey(name: 'first_page_url')
-  String firstPageUrl;
+  String? firstPageUrl;
 
   @JsonKey(name: 'last_page_url')
-  String lastPageUrl;
+  String? lastPageUrl;
 
   @JsonKey(name: 'prev_page_url')
-  String prevPageUrl;
+  String? prevPageUrl;
 
   @JsonKey(name: 'next_page_url')
-  String nextPageUrl;
+  String? nextPageUrl;
 
   @JsonKey(name: 'data')
   List<MenuItem> data;
@@ -49,11 +49,11 @@ class MenuItemList {
     required this.total,
     required this.from,
     required this.to,
-    required this.path,
-    required this.firstPageUrl,
-    required this.lastPageUrl,
-    required this.prevPageUrl,
-    required this.nextPageUrl,
+    this.path,
+    this.firstPageUrl,
+    this.lastPageUrl,
+    this.prevPageUrl,
+    this.nextPageUrl,
     required this.data,
   });
 
