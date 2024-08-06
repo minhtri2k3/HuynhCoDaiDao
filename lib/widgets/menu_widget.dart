@@ -1,22 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../models/banner.dart' as BannerModel;
-import '../models/menu.dart';
 import '../models/menu_item.dart';
-import '../models/menu_item_list.dart';
-import '../models/testing_menu.dart';
+import '../models/user_token.dart';
 import '../repositories/menu_repository.dart';
 
-import '../repositories/user_repository.dart';
-import '../services/router_service.dart';
 import 'banner_widget.dart';
-import 'label_widget.dart';
-import 'loading_widget.dart';
-import 'network_image_widget.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -32,37 +28,61 @@ class MenuWidget extends StatefulWidget {
 }
 
 class _MenuWidgetState extends State<MenuWidget> {
+  final Box _appData = Hive.box('appData');
   static const _pageSize = 20;
   final MenuRepository _menuRepository = getIt.get<MenuRepository>();
-  late UserRepository _userRepository = getIt.get<UserRepository>();
-  final PagingController<int, MenuItem> _pagingController =
-      PagingController(firstPageKey: 1);
+  late final PagingController<int, MenuItem> _pagingController;
+
   final ScrollController _scrollController = ScrollController();
-  Banner? _banner;
+  BannerModel.Banner? _banner;
   @override
   void initState() {
+    super.initState();
+    print('The action Url is ${widget.actionUrl}');
+    _pagingController = PagingController(firstPageKey: 1);
+    _fetchBanner();
     _pagingController.addPageRequestListener((pageKey) {
+      print('The pageKey is ${pageKey}');
       _fetchMenuList(pageKey);
     });
-    super.initState();
   }
-  Future < void > _fetchBanner() async{
 
+  @override
+  void didUpdateWidget(MenuWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.actionUrl != oldWidget.actionUrl) {
+      _pagingController.refresh();
+      _fetchBanner();
+      _pagingController.addPageRequestListener((pageKey) {
+        print('The pageKey is ${pageKey}');
+        _fetchMenuList(pageKey);
+      });
+    }
   }
+
+  Future<void> _fetchBanner() async {
+    final menu = await _menuRepository.get(path: widget.actionUrl, page: 1);
+    _banner = menu.banner;
+  }
+
   Future<void> _fetchMenuList(int pageKey) async {
     try {
+      print('Fetching menu ');
       final menu =
           await _menuRepository.get(path: widget.actionUrl, page: pageKey);
-      _banner = menu.banner;
       final itemsMenuList = menu.menuItemList;
-      final itemsMenuListData = itemsMenuList?.data;
-      final nextPageKey = pageKey;
-      if (itemsMenuList!.to == itemsMenuList.total) {
-        _pagingController.appendLastPage(itemsMenuListData!);
+      final itemsMenuListData = itemsMenuList?.data ?? [];
+      final isLastPage = itemsMenuList!.to >= itemsMenuList.total;
+      if (itemsMenuList.nextPageUrl == null || isLastPage) {
+        _pagingController.appendLastPage(itemsMenuListData);
+        print('Fetch the last page');
       } else {
         final nextPageKey = pageKey + 1;
-        _pagingController.appendPage(itemsMenuListData!, nextPageKey);
+        _pagingController.appendPage(itemsMenuListData, nextPageKey);
+        print('Fetch the page');
       }
+      // print('The to value is ${itemsMenuList.to.toString()}  ');
+      // print('The total value is ${itemsMenuList.total.toString()}');
     } catch (e) {
       _pagingController.error = e;
       print("Error with the fetchPage");
@@ -81,35 +101,128 @@ class _MenuWidgetState extends State<MenuWidget> {
     return Container(
       child: Column(
         children: [
-          BannerWidget(
-            banner: _banner,
-            margin: EdgeInsets.only(
-              bottom: 16,
+          if (_banner != null)
+            BannerWidget(
+              banner: _banner!,
+              margin: EdgeInsets.only(
+                bottom: 16,
+              ),
+              height: 140, // Specify your desired height
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16),
+          Expanded(
             child: PagedListView<int, MenuItem>(
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate<MenuItem>(
-                transitionDuration: const Duration( seconds: 2),
-                itemBuilder: (BuildContext context, MenuItem item, int index) =>Container(
-                  child: Column(
-                    children: [
-                      Text('The id of each menuItem is ${item.id}'),
-                      SizedBox(height: 3),
-                      Text('The title is ${item.title}'),
-                    ],
+                newPageProgressIndicatorBuilder: (context) => Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.orange,
+                    ),
                   ),
                 ),
+                firstPageProgressIndicatorBuilder: (context) => Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.orange,
+                    ),
+                  ),
+                ),
+                transitionDuration: const Duration(seconds: 1),
+                itemBuilder: (BuildContext context, MenuItem item, int index) =>
+                    Column(
+                  children: [
+                    ListTile(
+                      leading: item.primaryIconUrl != null
+                          ? CachedNetworkImage(
+                              httpHeaders: {
+                                'Authorization': 'Bearer ' +
+                                    (_appData.get('userToken') as UserToken)
+                                        .accessToken,
+                              },
+                              imageUrl: item.primaryIconUrl!,
+                              placeholder: (context, url) => CircleAvatar(
+                                backgroundColor: Colors.grey,
+                                child: CircularProgressIndicator(
+                                  color: Colors.orange,
+                                ), // Spinner while loading
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  CircleAvatar(
+                                child: Container(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    child: Icon(
+                                      Icons.account_circle_rounded,
+                                      color: Colors.grey,
+                                      size: 40,
+                                    )),
+                              ),
+                              width: 40, // Adjust width and height as needed
+                              height: 40,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                        'assets/default_menu_item_icon.png',
+                        width: 35,
+                        height: 35,
+                      ),
+                      // Default icon if no URL is provided
+                      title: Text(
+                        '${item.title}',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: item.description != null
+                          ? Text(
+                        '${item.description}',
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontSize: 11, // Adjust the font size as needed
+                          color: Colors.black, // Adjust the text color as needed
+                        ),
+                      )
+                          : null,
 
-
+                      onTap: () {
+                        if (item.actionUrl != null &&
+                            item.actionTypeName != null &&
+                            item.actionTitle != null) {
+                          final Uri uri = Uri(
+                            path: '/${item.actionTypeName}',
+                            queryParameters: {
+                              'actionUrl': base64Url
+                                  .encode(utf8.encode(item.actionUrl!)),
+                              'actionTitle': base64Url
+                                  .encode(utf8.encode(item.actionTitle!)),
+                            },
+                          );
+                          context.push(uri.toString());
+                        } else {
+                          // Handle the case when any of the required fields are null
+                          print("One or more required fields are null");
+                        }
+                      },
+                      trailing: Icon(
+                        Icons.navigate_next,
+                        color: Colors.amberAccent,
+                      ),
+                    ),
+                    Divider(
+                      height:
+                          1, // Adjust height to make the line thinner or thicker
+                      color: Colors.amber,
+                    )
+                  ],
+                ),
               ),
             ),
           ),
         ],
       ),
-
     );
   }
 }

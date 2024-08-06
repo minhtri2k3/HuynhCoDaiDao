@@ -7,7 +7,6 @@ import 'package:huynhcodaidaover2/widgets/menu_widget.dart';
 class MenuScreen extends StatelessWidget {
   final String actionTitle;
   final String actionUrl;
-
   const MenuScreen({
     required this.actionTitle,
     required this.actionUrl,

@@ -13,6 +13,7 @@ class BaseScreen extends StatelessWidget {
   const BaseScreen({
     required this.title,
     required this.body,
+
   });
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class BaseScreen extends StatelessWidget {
             return Scaffold(
               appBar: AppBar02Widget(
                 key: ValueKey('AppBar02WidgetKey'),
-                height: 160,
+                height: 55,
                 title: title,
                 audioControllerHeight: audioControllerHeight,
               ),

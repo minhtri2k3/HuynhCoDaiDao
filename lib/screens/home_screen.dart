@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../ui_components/linear_gradients.dart';
 
@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: MenuWidget(),
           ),
           bottomNavigationBar: Container(
-            height: 90,
+            height: 80,
             child: BottomNavigationBar(
               currentIndex: _currentIndex,
               type: BottomNavigationBarType.fixed,
@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
               unselectedIconTheme: IconThemeData(
                 size: 32,
               ),
-              unselectedItemColor: Colors.black45,
+              unselectedItemColor: Colors.black,
               unselectedFontSize: 16,
               items: [
                 BottomNavigationBarItem(

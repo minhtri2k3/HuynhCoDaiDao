@@ -29,7 +29,7 @@ class AuthenticationBloc
       } else {
         emit(AuthenticationFailure());
       }
-    } catch (_) {
+    } catch (_) { 
       emit(AuthenticationFailure());
     }
   }

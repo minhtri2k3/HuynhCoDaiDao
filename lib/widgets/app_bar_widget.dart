@@ -7,13 +7,12 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final BoxDecoration decoration;
 
   const AppBarWidget({
-    required Key key,
+    Key? key,
     required this.height,
     required this.child,
     required this.padding,
     required this.decoration,
-  })  : assert(height != null),
-        assert(child != null);
+  })  : super(key : key);
 
   @override
   Widget build(BuildContext context) {

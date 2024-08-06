@@ -1,17 +1,12 @@
-
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:get_it/get_it.dart';
-
 import 'package:flutter/material.dart';
-
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:huynhcodaidaover2/blocs/audio_controller_state.dart';
-import 'package:huynhcodaidaover2/blocs/audio_controller_bloc.dart';
-
-import 'package:huynhcodaidaover2/ui_components/linear_gradients.dart';
-import 'package:huynhcodaidaover2/widgets/app_bar_widget.dart';
+import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../blocs/audio_controller_bloc.dart';
+import '../blocs/audio_controller_state.dart';
+import '../ui_components/linear_gradients.dart';
+import 'app_bar_widget.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -19,13 +14,12 @@ class AppBar02Widget extends StatefulWidget implements PreferredSizeWidget {
   final double height;
   final String title;
   final double audioControllerHeight;
-
   const AppBar02Widget({
-    required Key key,
+    Key? key,
     required this.height,
     required this.title,
     required this.audioControllerHeight,
-  });
+  }) : super(key : key);
 
   @override
   Size get preferredSize => Size.fromHeight(height + audioControllerHeight);
@@ -35,8 +29,6 @@ class AppBar02Widget extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _AppBar02WidgetState extends State<AppBar02Widget> {
-
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -76,29 +68,31 @@ class _AppBar02WidgetState extends State<AppBar02Widget> {
                       ),
                     ],
                   ),
-                  child: Center(
-
-                  ),
+                  child: Center(),
                 ),
               ],
             );
           },
         ),
         AppBarWidget(
-          key: ValueKey('AppBar02Widget'),
           padding: EdgeInsets.all(1),
           height: widget.height,
           child: Center(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 GestureDetector(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () {
+                      GoRouter.of(context).pop();
+                    print('Pressed the pop');
+                    // context.go('/home'); // pop out to the '/home' in the router
+                  },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
                     child: Icon(
-                      Icons.arrow_back,
+                      Icons.arrow_back_ios,
                       color: Colors.white,
-                      size: 80,
+                      size: 20,
                     ),
                   ),
                 ),
@@ -109,23 +103,21 @@ class _AppBar02WidgetState extends State<AppBar02Widget> {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.robotoSlab(
                       color: Colors.white,
-                      fontSize: 50,
+                      fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/home/',
-                    (route) => false,
-                  ),
+                  onTap: () {
+                    context.go('/home');
+                  },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
                     child: Icon(
                       Icons.home,
                       color: Colors.white,
-                      size: 80,
+                      size: 20,
                     ),
                   ),
                 ),

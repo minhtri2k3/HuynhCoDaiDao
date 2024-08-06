@@ -1,19 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:huynhcodaidaover2/models/banner.dart';
+import 'package:huynhcodaidaover2/models/banner.dart'  as BannerModel;
 import 'package:huynhcodaidaover2/models/user_token.dart';
 import 'package:huynhcodaidaover2/services/router_service.dart';
 import 'package:shimmer/shimmer.dart';
 
 class BannerWidget extends StatefulWidget {
-  final Banner banner;
+  final BannerModel.Banner banner;
   final EdgeInsetsGeometry margin;
+  final double? width;
+  final double? height;
 
   const BannerWidget({
-     Key? key,
+    Key? key,
     required this.banner,
     required this.margin,
+    this.width,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -25,25 +29,21 @@ class _BannerWidgetState extends State<BannerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final Banner banner = widget.banner ;
+    final BannerModel.Banner banner = widget.banner;
     final EdgeInsetsGeometry margin = widget.margin;
     final Container marginWidget = Container(
       margin: margin,
     );
 
-    if (banner == null) {
-      return marginWidget;
-    }
-
-    final double width = 1080;
-    final double? height = banner.width == null || banner.height == null
+    final double width = widget.width ?? 1080;
+    final double? height = widget.height ?? (banner.width == null || banner.height == null
         ? null
-        : 1080 * banner.height / banner.width;
+        : width * banner.height / banner.width);
 
     return CachedNetworkImage(
       httpHeaders: {
         'Authorization':
-            'Bearer ' + (_appData.get('userToken') as UserToken).accessToken,
+        'Bearer ' + (_appData.get('userToken') as UserToken).accessToken,
       },
       imageUrl: banner.url!,
       imageBuilder: (BuildContext context, ImageProvider imageProvider) {
@@ -86,7 +86,11 @@ class _BannerWidgetState extends State<BannerWidget> {
         );
       },
       errorWidget: (BuildContext context, String url, dynamic error) {
-        return marginWidget;
+        return Container(
+          width: width,
+          height: height,
+          margin: margin,
+        );
       },
     );
   }

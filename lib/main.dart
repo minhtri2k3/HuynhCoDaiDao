@@ -12,6 +12,7 @@ import 'package:flutter/material.dart' hide Router;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:bloc/bloc.dart';
@@ -59,6 +60,7 @@ import 'package:huynhcodaidaover2/screens/pdf_view_screen.dart';
 
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
+import 'widgets/menu_widget.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -115,39 +117,53 @@ Future<void> setupAppData() async {
   await Hive.openBox('appData', encryptionCipher: HiveAesCipher(appDataKey));
 }
 
-Future<void> setupRouter(FluroRouter router) async {
-  router.define(
-    '/home/',
-    transitionType: TransitionType.fadeIn,
-    handler: Handler(
-      handlerFunc: (BuildContext? context, Map<String, dynamic> params) {
-        return HomeScreen();
+final GoRouter _router = GoRouter(
+  initialLocation: '/',
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, authState) {
+            if (authState is AuthenticationSuccess) {
+              return HomeScreen();
+            } else if (authState is AuthenticationFailure) {
+              return BlocProvider(
+                create: (context) => LoginScreenBloc(
+                    authenticationBloc: context.read<AuthenticationBloc>()),
+                child: LoginScreen(),
+              );
+            } else {
+              return SplashScreen();
+            }
+          },
+        );
       },
     ),
-  );
+    GoRoute(
 
-  router.define(
-    '/menu/',
-    transitionType: TransitionType.inFromRight,
-    handler: Handler(
-      handlerFunc: (BuildContext? context, Map<String, dynamic> params) {
-        String actionUrl = params['actionUrl'][0];
-        String actionTitle = params['actionTitle'][0];
-
-        actionUrl = utf8.decode(base64Url.decode(actionUrl));
-        actionTitle = utf8.decode(base64Url.decode(actionTitle));
-
+      path: '/menu',
+      builder: (BuildContext context, GoRouterState state) {
+        print("Go in in the path menu");
+        final actionUrl = utf8.decode(base64Url.decode(state.uri.queryParameters['actionUrl']!));
+        final actionTitle = utf8.decode(base64Url.decode(state.uri.queryParameters['actionTitle']!));
+        print('The actionUrl is ${actionUrl}');
+        print('The actionTitle is ${actionTitle}');
         return MenuScreen(
           actionUrl: actionUrl,
           actionTitle: actionTitle,
         );
       },
     ),
-  );
+    GoRoute(path: '/home',
+      builder: (BuildContext context, GoRouterState state){
+         return HomeScreen();
+      }
+    ),
 
-  // Define other routes similarly...
-}
 
+  ],
+);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -157,9 +173,9 @@ void main() async {
   ]);
 
   await setupGetIt();
-  final router = getIt<FluroRouter>();
+  // final router = getIt<FluroRouter>();
   await setupAppData();
-  await setupRouter(router);
+  // await setupRouter(router);
 
   Bloc.observer = GlobalBlocObserver();
 
@@ -186,29 +202,14 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       builder: DevicePreview.appBuilder,
-      onGenerateRoute: getIt<FluroRouter>().generator,
+      routerConfig: _router,
+      // routerDelegate: _router.routerDelegate,
+      // routeInformationParser: _router.routeInformationParser,
+      // routeInformationProvider: _router.routeInformationProvider,
       debugShowCheckedModeBanner: false,
-      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          Widget home = SplashScreen();
-          if (state is AuthenticationSuccess) {
-            home = HomeScreen();
-          } else if (state is AuthenticationFailure) {
-            final AuthenticationBloc authenticationBloc =
-                context.read<AuthenticationBloc>();
-            // BlocProvider.of<AuthenticationBloc>(context);
-            home = BlocProvider(
-              create: (context) =>
-                  LoginScreenBloc(authenticationBloc: authenticationBloc),
-              child: LoginScreen(),
-            );
-          }
 
-          return home;
-        },
-      ),
     );
   }
 }
