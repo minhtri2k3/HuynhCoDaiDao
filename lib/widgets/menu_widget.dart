@@ -62,7 +62,9 @@ class _MenuWidgetState extends State<MenuWidget> {
 
   Future<void> _fetchBanner() async {
     final menu = await _menuRepository.get(path: widget.actionUrl, page: 1);
-    _banner = menu.banner;
+    setState(() {
+      _banner = menu.banner;
+    });
   }
 
   Future<void> _fetchMenuList(int pageKey) async {
@@ -179,7 +181,6 @@ class _MenuWidgetState extends State<MenuWidget> {
                       subtitle: item.description != null
                           ? Text(
                         '${item.description}',
-                        maxLines: 2,
                         style: TextStyle(
                           fontSize: 11, // Adjust the font size as needed
                           color: Colors.black, // Adjust the text color as needed
