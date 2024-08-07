@@ -22,7 +22,7 @@ class MessageCategoryWidget extends StatefulWidget {
   final String actionUrl;
 
   const MessageCategoryWidget({
-    required Key key,
+    Key? key,
     this.actionUrl = '/app/messages/thong-bao',
   }) : super(key: key);
 
@@ -54,7 +54,14 @@ class _MessageCategoryWidgetState extends State<MessageCategoryWidget> {
   void dispose() {
     super.dispose();
   }
+  Future <void> _fetchMessageList(int pagekey) async{
+    try{
+      print('Fetching the message');
 
+    }catch(e){
+
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<MessageCategory>(
@@ -72,9 +79,9 @@ class _MessageCategoryWidgetState extends State<MessageCategoryWidget> {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             _messageCategory = snapshot.data!;
-            _messageList = _messageCategory.messages;
-            _messages = _messageList.data;
-            _banner = _messageCategory.banner;
+            _messageList = _messageCategory.messages!;
+            _messages = _messageList.data ?? [];
+            _banner = _messageCategory.banner!;
 
             // You can use _messageCategory, _messageList, _messages, and _banner here
           } else if (snapshot.hasError) {
@@ -98,7 +105,7 @@ class _MessageCategoryWidgetState extends State<MessageCategoryWidget> {
       itemBuilder: (context, index) {
         final message = _messages[index];
         return ListTile(
-          title: Text(message.title),
+          title: Text(message.title ?? 'No title'),
         );
       },
     );

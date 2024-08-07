@@ -13,13 +13,13 @@ MessageList _$MessageListFromJson(Map<String, dynamic> json) => MessageList(
       total: (json['total'] as num).toInt(),
       from: (json['from'] as num).toInt(),
       to: (json['to'] as num).toInt(),
-      path: json['path'] as String,
-      firstPageUrl: json['first_page_url'] as String,
-      lastPageUrl: json['last_page_url'] as String,
-      prevPageUrl: json['prev_page_url'] as String,
-      nextPageUrl: json['next_page_url'] as String,
-      data: (json['data'] as List<dynamic>)
-          .map((e) => Message.fromJson(e as Map<String, dynamic>))
+      path: json['path'] as String?,
+      firstPageUrl: json['first_page_url'] as String?,
+      lastPageUrl: json['last_page_url'] as String?,
+      prevPageUrl: json['prev_page_url'] as String?,
+      nextPageUrl: json['next_page_url'] as String?,
+      data: (json['data'] as List<dynamic>?)
+          ?.map((e) => Message.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

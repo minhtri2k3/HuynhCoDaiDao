@@ -8,20 +8,21 @@ part of 'message.dart';
 
 Message _$MessageFromJson(Map<String, dynamic> json) => Message(
       id: (json['id'] as num).toInt(),
-      title: json['title'] as String,
-      slug: json['slug'] as String,
-      imageUrl: json['image_url'] as String,
-      badge: json['badge'] as String,
-      date: json['date'] as String,
-      contentType: json['content_type'] as String,
-      content: json['content'] as String,
-      summary: json['summary'] as String,
-      note: json['note'] as String,
-      customStyle:
-          MessageStyle.fromJson(json['custom_style'] as Map<String, dynamic>),
-      actionTitle: json['action_title'] as String,
-      actionUrl: json['action_url'] as String,
-      actionTypeName: json['action_type_name'] as String,
+      title: json['title'] as String?,
+      slug: json['slug'] as String?,
+      imageUrl: json['image_url'] as String?,
+      badge: json['badge'] as String?,
+      date: json['date'] as String?,
+      contentType: json['content_type'] as String?,
+      content: json['content'] as String?,
+      summary: json['summary'] as String?,
+      note: json['note'] as String?,
+      customStyle: json['custom_style'] == null
+          ? null
+          : MessageStyle.fromJson(json['custom_style'] as Map<String, dynamic>),
+      actionTitle: json['action_title'] as String?,
+      actionUrl: json['action_url'] as String?,
+      actionTypeName: json['action_type_name'] as String?,
     );
 
 Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{

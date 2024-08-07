@@ -9,12 +9,18 @@ part of 'message_category.dart';
 MessageCategory _$MessageCategoryFromJson(Map<String, dynamic> json) =>
     MessageCategory(
       id: (json['id'] as num).toInt(),
-      title: json['title'] as String,
-      slug: json['slug'] as String,
-      banner: Banner.fromJson(json['banner'] as Map<String, dynamic>),
-      messages: MessageList.fromJson(json['messages'] as Map<String, dynamic>),
-      defaultStyle:
-          MessageStyle.fromJson(json['default_style'] as Map<String, dynamic>),
+      title: json['title'] as String?,
+      slug: json['slug'] as String?,
+      banner: json['banner'] == null
+          ? null
+          : Banner.fromJson(json['banner'] as Map<String, dynamic>),
+      messages: json['messages'] == null
+          ? null
+          : MessageList.fromJson(json['messages'] as Map<String, dynamic>),
+      defaultStyle: json['default_style'] == null
+          ? null
+          : MessageStyle.fromJson(
+              json['default_style'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$MessageCategoryToJson(MessageCategory instance) =>

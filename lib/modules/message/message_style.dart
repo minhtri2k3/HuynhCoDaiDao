@@ -8,49 +8,49 @@ class MessageStyle {
   int id;
 
   @JsonKey(name: 'title')
-  String title;
+  String? title;
 
   @JsonKey(name: 'slug')
-  String slug;
+  String? slug;
 
   @JsonKey(name: 'list_background_color')
-  String listBackgroundColor;
+  String? listBackgroundColor;
 
   @JsonKey(name: 'list_separator_color')
-  String listSeparatorColor;
+  String? listSeparatorColor;
 
   @JsonKey(name: 'container_background_color')
-  String containerBackgroundColor;
+  String? containerBackgroundColor;
 
   @JsonKey(name: 'container_border_color')
-  String containerBorderColor;
+  String? containerBorderColor;
 
   @JsonKey(name: 'badge_background_color')
-  String badgeBackgroundColor;
+  String? badgeBackgroundColor;
 
   @JsonKey(name: 'badge_text_color')
-  String badgeTextColor;
+  String? badgeTextColor;
 
   @JsonKey(name: 'date_text_color')
-  String dateTextColor;
+  String? dateTextColor;
 
   @JsonKey(name: 'title_text_color')
-  String titleTextColor;
+  String? titleTextColor;
 
   @JsonKey(name: 'content_text_color')
-  String contentTextColor;
+  String? contentTextColor;
 
   @JsonKey(name: 'summary_text_color')
-  String summaryTextColor;
+  String? summaryTextColor;
 
   @JsonKey(name: 'primary_icon_url')
-  String primaryIconUrl;
+  String? primaryIconUrl;
 
   @JsonKey(name: 'secondary_icon_url')
-  String secondaryIconUrl;
+  String? secondaryIconUrl;
 
   @JsonKey(name: 'read_more_icon_url')
-  String readMoreIconUrl;
+  String? readMoreIconUrl;
 
   MessageStyle({
     required this.id,

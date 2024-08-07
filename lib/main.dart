@@ -141,12 +141,13 @@ final GoRouter _router = GoRouter(
       },
     ),
     GoRoute(
-
       path: '/menu',
       builder: (BuildContext context, GoRouterState state) {
         print("Go in in the path menu");
-        final actionUrl = utf8.decode(base64Url.decode(state.uri.queryParameters['actionUrl']!));
-        final actionTitle = utf8.decode(base64Url.decode(state.uri.queryParameters['actionTitle']!));
+        final actionUrl = utf8
+            .decode(base64Url.decode(state.uri.queryParameters['actionUrl']!));
+        final actionTitle = utf8.decode(
+            base64Url.decode(state.uri.queryParameters['actionTitle']!));
         print('The actionUrl is ${actionUrl}');
         print('The actionTitle is ${actionTitle}');
         return MenuScreen(
@@ -155,13 +156,22 @@ final GoRouter _router = GoRouter(
         );
       },
     ),
-    GoRoute(path: '/home',
-      builder: (BuildContext context, GoRouterState state){
-         return HomeScreen();
-      }
-    ),
-
-
+    GoRoute(
+        path: '/message_list',
+        builder: (BuildContext context, GoRouterState state) {
+          final actionUrl = utf8.decode(
+              base64Url.decode(state.uri.queryParameters['actionUrl']!));
+          final actionTitle = utf8.decode(
+              base64Url.decode(state.uri.queryParameters['actionTitle']!));
+          return MessageCategoryScreen(
+              actionTitle: actionTitle,
+              actionUrl: actionUrl);
+        }),
+    GoRoute(
+        path: '/home',
+        builder: (BuildContext context, GoRouterState state) {
+          return HomeScreen();
+        }),
   ],
 );
 void main() async {
@@ -209,7 +219,6 @@ class MyApp extends StatelessWidget {
       // routeInformationParser: _router.routeInformationParser,
       // routeInformationProvider: _router.routeInformationProvider,
       debugShowCheckedModeBanner: false,
-
     );
   }
 }

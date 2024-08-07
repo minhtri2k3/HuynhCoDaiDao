@@ -9,16 +9,17 @@ class MessageCategoryScreen extends StatelessWidget {
   final String actionUrl;
 
   const MessageCategoryScreen({
-
     required this.actionTitle,
     required this.actionUrl,
   });
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
+    return BaseScreen(
+      title: actionTitle,
+      body: MessageCategoryWidget(
+        actionUrl: actionUrl,
+      ),
     );
   }
 }

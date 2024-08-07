@@ -12,19 +12,19 @@ class MessageCategory {
   int id;
 
   @JsonKey(name: 'title')
-  String title;
+  String? title;
 
   @JsonKey(name: 'slug')
-  String slug;
+  String? slug;
 
   @JsonKey(name: 'banner')
-  Banner banner;
+  Banner? banner;
 
   @JsonKey(name: 'messages')
-  MessageList messages;
+  MessageList? messages;
 
   @JsonKey(name: 'default_style')
-  MessageStyle defaultStyle;
+  MessageStyle? defaultStyle;
 
   MessageCategory({
     required this.id,

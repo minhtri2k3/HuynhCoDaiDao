@@ -10,43 +10,43 @@ class Message {
   int id;
 
   @JsonKey(name: 'title')
-  String title;
+  String? title;
 
   @JsonKey(name: 'slug')
-  String slug;
+  String? slug;
 
   @JsonKey(name: 'image_url')
-  String imageUrl;
+  String? imageUrl;
 
   @JsonKey(name: 'badge')
-  String badge;
+  String? badge;
 
   @JsonKey(name: 'date')
-  String date;
+  String? date;
 
   @JsonKey(name: 'content_type')
-  String contentType;
+  String? contentType;
 
   @JsonKey(name: 'content')
-  String content;
+  String? content;
 
   @JsonKey(name: 'summary')
-  String summary;
+  String? summary;
 
   @JsonKey(name: 'note')
-  String note;
+  String? note;
 
   @JsonKey(name: 'custom_style')
-  MessageStyle customStyle;
+  MessageStyle? customStyle;
 
   @JsonKey(name: 'action_title')
-  String actionTitle;
+  String ?actionTitle;
 
   @JsonKey(name: 'action_url')
-  String actionUrl;
+  String ?actionUrl;
 
   @JsonKey(name: 'action_type_name')
-  String actionTypeName;
+  String ?actionTypeName;
 
   Message({
     required this.id,

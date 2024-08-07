@@ -16,9 +16,10 @@ Menu _$MenuFromJson(Map<String, dynamic> json) => Menu(
       banner: json['banner'] == null
           ? null
           : Banner.fromJson(json['banner'] as Map<String, dynamic>),
-    )..menuItemList = json['menu_items'] == null
-        ? null
-        : MenuItemList.fromJson(json['menu_items'] as Map<String, dynamic>);
+      menuItemList: json['menu_items'] == null
+          ? null
+          : MenuItemList.fromJson(json['menu_items'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$MenuToJson(Menu instance) => <String, dynamic>{
       'id': instance.id,
