@@ -35,79 +35,53 @@ class _MessageCategoryWidgetState extends State<MessageCategoryWidget> {
 
   dynamic _state;
   late Future<MessageCategory> _messageCategoryFuture;
-  late MessageCategory _messageCategory;
-  late MessageList _messageList;
-  late List<Message> _messages;
   late BannerModel.Banner _banner;
   int _page = 1;
   bool _shouldLoad = false;
-
+  MessageCategory? _messageCategory ; // 1st
+  List<Message>? _messages; // 2nd
+  Message? _message; // 3rd
   @override
   void initState() {
-    _messageCategoryFuture = _messageCategoryRepository.get(
-      path: widget.actionUrl,
-    );
+    _fetchMessageList();
+
     super.initState();
   }
 
   @override
+  void didUpdateWidget(covariant MessageCategoryWidget oldWidget) {
+    _fetchMessageList();
+    super.didUpdateWidget(oldWidget);
+  }
+  @override
   void dispose() {
     super.dispose();
   }
-  Future <void> _fetchMessageList(int pagekey) async{
+  Future <void> _fetchMessageList() async{
     try{
       print('Fetching the message');
-
+        _messageCategory =  _messageCategoryRepository.get(
+        path: widget.actionUrl,
+      ) as MessageCategory;
+        _messages = _messageCategory?.messages as List<Message>?;
+        print('The message category is ${_messageCategory?.id}');
     }catch(e){
 
     }
   }
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<MessageCategory>(
-      future: _messageCategoryFuture,
-      builder: (BuildContext context, AsyncSnapshot<MessageCategory> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: SpinKitFadingCircle(
-              size: 120,
-              color: Colors.amber,
-            ),
-          );
-        }
-
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            _messageCategory = snapshot.data!;
-            _messageList = _messageCategory.messages!;
-            _messages = _messageList.data ?? [];
-            _banner = _messageCategory.banner!;
-
-            // You can use _messageCategory, _messageList, _messages, and _banner here
-          } else if (snapshot.hasError) {
-            // Handle error state
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-        }
-
-        return _buildContent();
-      },
-    );
+     return Scaffold(
+       body:  _messageCategory != null
+        ? Text('Hello this is the message ${_message?.title}')
+           : Center(
+         child: SpinKitFadingCircle(
+           size: 120,
+           color: Colors.amber,
+         ),
+       )
+     );
   }
 
-  Widget _buildContent() {
-    if (_messages.isEmpty) {
-      return Center(child: Text('No messages found.'));
-    }
 
-    return ListView.builder(
-      itemCount: _messages.length,
-      itemBuilder: (context, index) {
-        final message = _messages[index];
-        return ListTile(
-          title: Text(message.title ?? 'No title'),
-        );
-      },
-    );
-  }
 }

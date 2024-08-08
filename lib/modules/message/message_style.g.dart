@@ -7,7 +7,7 @@ part of 'message_style.dart';
 // **************************************************************************
 
 MessageStyle _$MessageStyleFromJson(Map<String, dynamic> json) => MessageStyle(
-      id: (json['id'] as num).toInt(),
+      id: (json['id'] as num?)?.toInt(),
       title: json['title'] as String?,
       slug: json['slug'] as String?,
       listBackgroundColor: json['list_background_color'] as String?,

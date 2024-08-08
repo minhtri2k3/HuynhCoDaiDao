@@ -148,8 +148,8 @@ final GoRouter _router = GoRouter(
             .decode(base64Url.decode(state.uri.queryParameters['actionUrl']!));
         final actionTitle = utf8.decode(
             base64Url.decode(state.uri.queryParameters['actionTitle']!));
-        print('The actionUrl is ${actionUrl}');
-        print('The actionTitle is ${actionTitle}');
+        print('The actionUrl in menu is ${actionUrl}');
+        print('The actionTitle in menu is ${actionTitle}');
         return MenuScreen(
           actionUrl: actionUrl,
           actionTitle: actionTitle,
@@ -159,10 +159,13 @@ final GoRouter _router = GoRouter(
     GoRoute(
         path: '/message_list',
         builder: (BuildContext context, GoRouterState state) {
+          print('Go in in the message_list ');
           final actionUrl = utf8.decode(
               base64Url.decode(state.uri.queryParameters['actionUrl']!));
           final actionTitle = utf8.decode(
               base64Url.decode(state.uri.queryParameters['actionTitle']!));
+          print('The actionUrl in message is ${actionUrl}');
+          print('The actionTitle in message is ${actionTitle}');
           return MessageCategoryScreen(
               actionTitle: actionTitle,
               actionUrl: actionUrl);

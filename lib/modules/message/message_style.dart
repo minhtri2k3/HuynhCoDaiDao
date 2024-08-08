@@ -5,7 +5,7 @@ part 'message_style.g.dart';
 @JsonSerializable()
 class MessageStyle {
   @JsonKey(name: 'id')
-  int id;
+  int? id;
 
   @JsonKey(name: 'title')
   String? title;
@@ -53,7 +53,7 @@ class MessageStyle {
   String? readMoreIconUrl;
 
   MessageStyle({
-    required this.id,
+    this.id,
     required this.title,
     required this.slug,
     required this.listBackgroundColor,

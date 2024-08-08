@@ -32,7 +32,6 @@ class _MenuWidgetState extends State<MenuWidget> {
   static const _pageSize = 20;
   final MenuRepository _menuRepository = getIt.get<MenuRepository>();
   late final PagingController<int, MenuItem> _pagingController;
-
   final ScrollController _scrollController = ScrollController();
   BannerModel.Banner? _banner;
   @override
@@ -192,6 +191,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                         if (item.actionUrl != null &&
                             item.actionTypeName != null &&
                             item.actionTitle != null) {
+                          print('Tapped the ${item.actionTypeName}');
                           final Uri uri = Uri(
                             path: '/${item.actionTypeName}',
                             queryParameters: {

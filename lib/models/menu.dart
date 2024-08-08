@@ -23,7 +23,7 @@ class Menu {
   String? bellUrl;
 
   @JsonKey(name: 'hot_album_url')
-  String ?hotAlbumUrl;
+  String? hotAlbumUrl;
   @JsonKey(name: 'banner')
   Banner? banner;
 
