@@ -175,31 +175,17 @@ class _MenuWidgetState extends State<MenuWidget> {
                         if (item.actionUrl != null &&
                             item.actionTypeName != null &&
                             item.actionTitle != null) {
-                          if(item.actionTypeName =='message_list'){
-                            print('Go to the if');
-                            final Uri uri = Uri(
-                              path: '/${item.actionTypeName}',
-                              queryParameters: {
-                                'Message_actionUrl': base64Url
-                                    .encode(utf8.encode(item.actionUrl!)),
-                                'Message_actionTitle': base64Url
-                                    .encode(utf8.encode(item.actionTitle!)),
-                              }
-                            );
-                            context.push(uri.toString());
-                          }else if(item.actionTypeName =='menu'){
-                            print('Tapped the ${item.actionTypeName}');
-                            final Uri uri = Uri(
-                              path: '/${item.actionTypeName}',
-                              queryParameters: {
-                                'actionUrl': base64Url
-                                    .encode(utf8.encode(item.actionUrl!)),
-                                'actionTitle': base64Url
-                                    .encode(utf8.encode(item.actionTitle!)),
-                              },
-                            );
-                            context.push(uri.toString());
-                          }
+                          print('Tapped the ${item.actionTypeName}');
+                          final Uri uri = Uri(
+                            path: '/${item.actionTypeName}',
+                            queryParameters: {
+                              'actionUrl': base64Url
+                                  .encode(utf8.encode(item.actionUrl!)),
+                              'actionTitle': base64Url
+                                  .encode(utf8.encode(item.actionTitle!)),
+                            },
+                          );
+                          context.push(uri.toString());
 
                         } else {
 
