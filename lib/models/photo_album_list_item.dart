@@ -8,22 +8,22 @@ class PhotoAlbumListItem {
   int id;
 
   @JsonKey(name: 'title')
-  String title;
+  String? title;
 
   @JsonKey(name: 'slug')
-  String slug;
+  String? slug;
 
   @JsonKey(name: 'cover_url')
-  String coverUrl;
+  String? coverUrl;
 
   @JsonKey(name: 'action_title')
-  String actionTitle;
+  String? actionTitle;
 
   @JsonKey(name: 'action_url')
-  String actionUrl;
+  String? actionUrl;
 
   @JsonKey(name: 'action_type_name')
-  String actionTypeName;
+  String? actionTypeName;
 
   PhotoAlbumListItem({
     required this.id,

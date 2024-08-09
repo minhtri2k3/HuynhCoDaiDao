@@ -169,6 +169,19 @@ final GoRouter _router = GoRouter(
               actionUrl: actionUrl
           );
         }),
+    GoRoute(path: '/photo_album_list',
+        builder: (BuildContext context, GoRouterState state) {
+          print('Go in in the photo_album ');
+          final actionUrl = utf8.decode(
+              base64Url.decode(state.uri.queryParameters['actionUrl']!));
+          final actionTitle = utf8.decode(
+              base64Url.decode(state.uri.queryParameters['actionTitle']!));
+          return PhotoAlbumCollectionScreen(
+              actionTitle: actionTitle,
+              actionUrl: actionUrl
+          );
+        }
+    ),
     GoRoute(
         path: '/home',
         builder: (BuildContext context, GoRouterState state) {

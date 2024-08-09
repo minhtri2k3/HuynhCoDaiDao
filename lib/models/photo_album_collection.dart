@@ -11,19 +11,19 @@ class PhotoAlbumCollection {
   int id;
 
   @JsonKey(name: 'title')
-  String title;
+  String?  title;
 
   @JsonKey(name: 'slug')
-  String slug;
+  String? slug;
 
   @JsonKey(name: 'default_icon_url')
-  String defaultIconUrl;
+  String? defaultIconUrl;
 
   @JsonKey(name: 'banner')
-  Banner banner;
+  Banner? banner;
 
   @JsonKey(name: 'photo_albums')
-  PhotoAlbumList photoAlbumList;
+  PhotoAlbumList? photoAlbumList;
 
   PhotoAlbumCollection({
     required this.id,

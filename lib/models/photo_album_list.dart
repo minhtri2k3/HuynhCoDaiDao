@@ -25,19 +25,19 @@ class PhotoAlbumList {
   int to;
 
   @JsonKey(name: 'path')
-  String path;
+  String? path;
 
   @JsonKey(name: 'first_page_url')
-  String firstPageUrl;
+  String? firstPageUrl;
 
   @JsonKey(name: 'last_page_url')
-  String lastPageUrl;
+  String? lastPageUrl;
 
   @JsonKey(name: 'prev_page_url')
-  String prevPageUrl;
+  String? prevPageUrl;
 
   @JsonKey(name: 'next_page_url')
-  String nextPageUrl;
+  String? nextPageUrl;
 
   @JsonKey(name: 'data')
   List<PhotoAlbumListItem> data;
