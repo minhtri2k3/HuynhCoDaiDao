@@ -112,22 +112,8 @@ class _MenuWidgetState extends State<MenuWidget> {
             child: PagedListView<int, MenuItem>(
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate<MenuItem>(
-                newPageProgressIndicatorBuilder: (context) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.orange,
-                    ),
-                  ),
-                ),
-                firstPageProgressIndicatorBuilder: (context) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.orange,
-                    ),
-                  ),
-                ),
+                newPageProgressIndicatorBuilder: (context) => _Loading,
+                firstPageProgressIndicatorBuilder: (context) => _Loading,
                 transitionDuration: const Duration(seconds: 1),
                 itemBuilder: (BuildContext context, MenuItem item, int index) =>
                     Column(
@@ -237,6 +223,16 @@ class _MenuWidgetState extends State<MenuWidget> {
             ),
           ),
         ],
+      ),
+    );
+  }
+  Widget get _Loading{
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: CircularProgressIndicator(
+          color: Colors.orange,
+        ),
       ),
     );
   }

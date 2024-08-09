@@ -40,20 +40,38 @@ class _MessageCategoryWidgetState extends State<MessageCategoryWidget> {
   final MessageCategoryRepository _messageCategoryRepository =
       getIt.get<MessageCategoryRepository>();
   late final PagingController<int, Message> _pagingController;
+  BannerModel.Banner? _banner;
   @override
   void initState() {
     super.initState();
+    _fetchBanner();
     _pagingController = PagingController(firstPageKey: 1);
     _pagingController.addPageRequestListener((pageKey) {
       _fetchMessageList(pageKey);
     });
   }
-
+  @override
+  void didUpdateWidget(covariant MessageCategoryWidget oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    if (widget.Message_actionUrl != oldWidget.Message_actionUrl) {
+      _pagingController.refresh();
+      _fetchBanner();
+      _pagingController.addPageRequestListener((pageKey) {
+        _fetchMessageList(pageKey);
+      });
+    }
+  }
   @override
   void dispose() {
     super.dispose();
   }
-
+  Future<void> _fetchBanner() async {
+    final messageCategory = await _messageCategoryRepository.get(path: widget.Message_actionUrl, page: 1);
+    setState(() {
+      _banner = messageCategory.banner;
+    });
+  }
   Future<void> _fetchMessageList(int pageKey) async {
     try {
       print('Fetching the message');
@@ -73,82 +91,133 @@ class _MessageCategoryWidgetState extends State<MessageCategoryWidget> {
     } catch (e) {}
   }
 
+  Color _parseColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    return Color(int.parse(hexColor, radix: 16));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Expanded(
-      child: PagedListView<int, Message>(
-        pagingController: _pagingController,
-        builderDelegate: PagedChildBuilderDelegate<Message>(
-            itemBuilder: (BuildContext context, Message item, int index) =>
-                Padding(
-                  padding: const EdgeInsets.only(left: 15 , top : 10 , bottom:  10 , right:  15),
-                  child: Container(
-                    decoration:  BoxDecoration(
-                      color: Colors.orange,
-                      borderRadius: BorderRadius.circular(15), // Rounded corners
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     // color: Colors.black.withOpacity(0.1),
-                      //     spreadRadius: 1,
-                      //     blurRadius: 5,
-                      //     offset: Offset(0, 3), // Shadow position
-                      //   ),
-                      // ],
-                    ),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: item.customStyle?.primaryIconUrl != null
-                              ? CachedNetworkImage(
-                            httpHeaders: {
-                              'Authorization': 'Bearer ' +
-                                  (_appData.get('userToken') as UserToken)
-                                      .accessToken,
-                            },
-                            imageUrl: item.customStyle!.primaryIconUrl!,
-                            placeholder: (context, url) => CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              child: CircularProgressIndicator(
-                                color: Colors.orange,
-                              ), // Spinner while loading
-                            ),
-                            errorWidget: (context, url, error) =>
-                                CircleAvatar(
-                                  child: Container(
-                                      height: double.infinity,
-                                      width: double.infinity,
-                                      child: Icon(
-                                        Icons.account_circle_rounded,
-                                        color: Colors.grey,
-                                        size: 40,
-                                      )),
+        child: Column(
+          children: [
+            if (_banner != null)
+              BannerWidget(
+                banner: _banner!,
+                margin: EdgeInsets.only(
+                  bottom: 16,
+                ),
+                height: 140, // Specify your desired height
+              ),
+            Expanded(
+                  child: PagedListView<int, Message>(
+            pagingController: _pagingController,
+            builderDelegate: PagedChildBuilderDelegate<Message>(
+               firstPageErrorIndicatorBuilder: (context) => _Loading ,
+                newPageProgressIndicatorBuilder: (context) => _Loading,
+                itemBuilder: (BuildContext context, Message item, int index) =>
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15, top: 10, bottom: 15, right: 15),
+                      child: Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: item.customStyle != null
+                                ? _parseColorFromHex(
+                                    item.customStyle!.containerBackgroundColor!)
+                                : Colors.grey,
+                            borderRadius:
+                                BorderRadius.circular(15), // Rounded corners
+                            boxShadow: [
+                              BoxShadow(
+                                color: item.customStyle != null
+                                    ? _parseColorFromHex(
+                                        item.customStyle!.containerBorderColor!)
+                                    : Colors.black,
+                                spreadRadius: 1,
+                                blurRadius: 5,
+                                offset: Offset(0, 3), // Shadow position
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              ListTile(
+                                leading: item.customStyle?.primaryIconUrl != null
+                                    ? CachedNetworkImage(
+                                        httpHeaders: {
+                                          'Authorization': 'Bearer ' +
+                                              (_appData.get('userToken') as UserToken)
+                                                  .accessToken,
+                                        },
+                                        imageUrl: item.customStyle!.primaryIconUrl!,
+                                        placeholder: (context, url) => CircleAvatar(
+                                          backgroundColor: Colors.grey,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.orange,
+                                          ), // Spinner while loading
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            CircleAvatar(
+                                          child: Container(
+                                              height: double.infinity,
+                                              width: double.infinity,
+                                              child: Icon(
+                                                Icons.account_circle_rounded,
+                                                color: Colors.grey,
+                                                size: 40,
+                                              )),
+                                        ),
+                                        width:
+                                            40, // Adjust width and height as needed
+                                        height: 40,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        'assets/default_menu_item_icon.png',
+                                        width: 35,
+                                        height: 35,
+                                      ),
+                                title: Text(
+                                  '${item.date}',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                  ),
                                 ),
-                            width: 40, // Adjust width and height as needed
-                            height: 40,
-                            fit: BoxFit.cover,
-                          )
-                              : Image.asset(
-                            'assets/default_menu_item_icon.png',
-                            width: 35,
-                            height: 35,
+                                subtitle: Text(
+                                  '${item.title}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: item.customStyle != null &&
+                                            item.customStyle!.titleTextColor != null
+                                        ? _parseColorFromHex(
+                                            item.customStyle!.titleTextColor!)
+                                        : Colors
+                                            .black, // Fallback to black if no color is provided   ),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                          title: Text(
-                              '${item.date}',
-                            style: TextStyle(
-                              fontSize: 13,
-
-                            ),
-                          ),
-                          subtitle: Text('${item.title}'),
                         ),
-                      ],
-
-                    ),
+                      ),
+                    )),
                   ),
-                )
+                ),
+          ],
+        ));
+  }
+  Widget get _Loading{
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: CircularProgressIndicator(
+          color: Colors.orange,
         ),
       ),
-    ));
+    );
   }
 }
