@@ -38,7 +38,7 @@ class _MessageCategoryWidgetState extends State<MessageCategoryWidget> {
   late BannerModel.Banner _banner;
   int _page = 1;
   bool _shouldLoad = false;
-  MessageCategory? _messageCategory ; // 1st
+  // MessageCategory? _messageCategory ; // 1st
   List<Message>? _messages; // 2nd
   Message? _message; // 3rd
   @override
@@ -60,11 +60,11 @@ class _MessageCategoryWidgetState extends State<MessageCategoryWidget> {
   Future <void> _fetchMessageList() async{
     try{
       print('Fetching the message');
-        _messageCategory =  _messageCategoryRepository.get(
+       final MessageCategory  _messageCategory =  _messageCategoryRepository.get(
         path: widget.actionUrl,
       ) as MessageCategory;
-        _messages = _messageCategory?.messages as List<Message>?;
-        print('The message category is ${_messageCategory?.id}');
+        _messages = _messageCategory.messages as List<Message>?;
+        print('The message category is ${_messageCategory.id}');
     }catch(e){
 
     }
@@ -72,14 +72,11 @@ class _MessageCategoryWidgetState extends State<MessageCategoryWidget> {
   @override
   Widget build(BuildContext context) {
      return Scaffold(
-       body:  _messageCategory != null
-        ? Text('Hello this is the message ${_message?.title}')
-           : Center(
-         child: SpinKitFadingCircle(
-           size: 120,
-           color: Colors.amber,
-         ),
-       )
+       body:  Column(
+         children: [
+           Text('This is the message widget'),
+         ],
+     )
      );
   }
 
