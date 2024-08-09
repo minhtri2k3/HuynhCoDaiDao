@@ -81,46 +81,73 @@ class _MessageCategoryWidgetState extends State<MessageCategoryWidget> {
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<Message>(
             itemBuilder: (BuildContext context, Message item, int index) =>
-                Column(
-                  children: [
-                    ListTile(
-                      leading: item.customStyle?.primaryIconUrl != null
-                          ? CachedNetworkImage(
-                        httpHeaders: {
-                          'Authorization': 'Bearer ' +
-                              (_appData.get('userToken') as UserToken)
-                                  .accessToken,
-                        },
-                        imageUrl: item.customStyle!.primaryIconUrl!,
-                        placeholder: (context, url) => CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          child: CircularProgressIndicator(
-                            color: Colors.orange,
-                          ), // Spinner while loading
-                        ),
-                        errorWidget: (context, url, error) =>
-                            CircleAvatar(
-                              child: Container(
-                                  height: double.infinity,
-                                  width: double.infinity,
-                                  child: Icon(
-                                    Icons.account_circle_rounded,
-                                    color: Colors.grey,
-                                    size: 40,
-                                  )),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15 , top : 10 , bottom:  10 , right:  15),
+                  child: Container(
+                    decoration:  BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.circular(15), // Rounded corners
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     // color: Colors.black.withOpacity(0.1),
+                      //     spreadRadius: 1,
+                      //     blurRadius: 5,
+                      //     offset: Offset(0, 3), // Shadow position
+                      //   ),
+                      // ],
+                    ),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: item.customStyle?.primaryIconUrl != null
+                              ? CachedNetworkImage(
+                            httpHeaders: {
+                              'Authorization': 'Bearer ' +
+                                  (_appData.get('userToken') as UserToken)
+                                      .accessToken,
+                            },
+                            imageUrl: item.customStyle!.primaryIconUrl!,
+                            placeholder: (context, url) => CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              child: CircularProgressIndicator(
+                                color: Colors.orange,
+                              ), // Spinner while loading
                             ),
-                        width: 40, // Adjust width and height as needed
-                        height: 40,
-                        fit: BoxFit.cover,
-                      )
-                          : Image.asset(
-                        'assets/default_menu_item_icon.png',
-                        width: 35,
-                        height: 35,
-                      ),
-                    )
-                  ],
-                )),
+                            errorWidget: (context, url, error) =>
+                                CircleAvatar(
+                                  child: Container(
+                                      height: double.infinity,
+                                      width: double.infinity,
+                                      child: Icon(
+                                        Icons.account_circle_rounded,
+                                        color: Colors.grey,
+                                        size: 40,
+                                      )),
+                                ),
+                            width: 40, // Adjust width and height as needed
+                            height: 40,
+                            fit: BoxFit.cover,
+                          )
+                              : Image.asset(
+                            'assets/default_menu_item_icon.png',
+                            width: 35,
+                            height: 35,
+                          ),
+                          title: Text(
+                              '${item.date}',
+                            style: TextStyle(
+                              fontSize: 13,
+
+                            ),
+                          ),
+                          subtitle: Text('${item.title}'),
+                        ),
+                      ],
+
+                    ),
+                  ),
+                )
+        ),
       ),
     ));
   }
