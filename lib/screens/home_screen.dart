@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -13,8 +14,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-
+  int _selectedIndex = 0;
+  final List<String> _routes = ['/','/menu','/lala'];
+  void _onTapped(int index){
+    setState(() {
+      _selectedIndex = index;
+    });
+    GoRouter.of(context).go(_routes[index]);
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -33,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
           bottomNavigationBar: Container(
             height: 80,
             child: BottomNavigationBar(
-              currentIndex: _currentIndex,
+              currentIndex: _selectedIndex,
               type: BottomNavigationBarType.fixed,
               backgroundColor: Colors.white.withAlpha(240),
               selectedIconTheme: IconThemeData(
@@ -74,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Cài đặt',
                 ),
               ],
-              onTap: (index) => setState(() => _currentIndex = index),
+              onTap: _onTapped,
             ),
           ),
         ),

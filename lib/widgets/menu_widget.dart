@@ -41,7 +41,6 @@ class _MenuWidgetState extends State<MenuWidget> {
     _pagingController = PagingController(firstPageKey: 1);
     _fetchBanner();
     _pagingController.addPageRequestListener((pageKey) {
-      print('The pageKey is ${pageKey}');
       _fetchMenuList(pageKey);
     });
   }
@@ -53,7 +52,6 @@ class _MenuWidgetState extends State<MenuWidget> {
       _pagingController.refresh();
       _fetchBanner();
       _pagingController.addPageRequestListener((pageKey) {
-        print('The pageKey is ${pageKey}');
         _fetchMenuList(pageKey);
       });
     }
@@ -191,18 +189,34 @@ class _MenuWidgetState extends State<MenuWidget> {
                         if (item.actionUrl != null &&
                             item.actionTypeName != null &&
                             item.actionTitle != null) {
-                          print('Tapped the ${item.actionTypeName}');
-                          final Uri uri = Uri(
-                            path: '/${item.actionTypeName}',
-                            queryParameters: {
-                              'actionUrl': base64Url
-                                  .encode(utf8.encode(item.actionUrl!)),
-                              'actionTitle': base64Url
-                                  .encode(utf8.encode(item.actionTitle!)),
-                            },
-                          );
-                          context.push(uri.toString());
+                          if(item.actionTypeName =='message_list'){
+                            print('Go to the if');
+                            final Uri uri = Uri(
+                              path: '/${item.actionTypeName}',
+                              queryParameters: {
+                                'Message_actionUrl': base64Url
+                                    .encode(utf8.encode(item.actionUrl!)),
+                                'Message_actionTitle': base64Url
+                                    .encode(utf8.encode(item.actionTitle!)),
+                              }
+                            );
+                            context.push(uri.toString());
+                          }else if(item.actionTypeName =='menu'){
+                            print('Tapped the ${item.actionTypeName}');
+                            final Uri uri = Uri(
+                              path: '/${item.actionTypeName}',
+                              queryParameters: {
+                                'actionUrl': base64Url
+                                    .encode(utf8.encode(item.actionUrl!)),
+                                'actionTitle': base64Url
+                                    .encode(utf8.encode(item.actionTitle!)),
+                              },
+                            );
+                            context.push(uri.toString());
+                          }
+
                         } else {
+
                           // Handle the case when any of the required fields are null
                           print("One or more required fields are null");
                         }

@@ -5,20 +5,20 @@ import 'package:huynhcodaidaover2/screens/base_screen.dart';
 import 'package:huynhcodaidaover2/modules/message/message_category_widget.dart';
 
 class MessageCategoryScreen extends StatelessWidget {
-  final String actionTitle;
-  final String actionUrl;
+  final String Message_actionTitle;
+  final String Message_actionUrl;
 
   const MessageCategoryScreen({
-    required this.actionTitle,
-    required this.actionUrl,
+    required this.Message_actionTitle,
+    required this.Message_actionUrl,
   });
 
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: actionTitle,
+      title: Message_actionTitle,
       body: MessageCategoryWidget(
-        actionUrl: actionUrl,
+        Message_actionUrl: Message_actionUrl,
       ),
     );
   }
