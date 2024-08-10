@@ -1,31 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:get_it/get_it.dart';
-
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
-
-import 'package:huynhcodaidaover2/models/photo_album_list_item.dart';
-import 'package:huynhcodaidaover2/models/photo_album_list.dart';
-import 'package:huynhcodaidaover2/models/photo_album_collection.dart';
-import 'package:huynhcodaidaover2/models/banner.dart' as BannerModel;
-
-import 'package:huynhcodaidaover2/widgets/network_image_widget.dart';
-import 'package:huynhcodaidaover2/widgets/banner_widget.dart';
-import 'package:huynhcodaidaover2/widgets/loading_widget.dart';
-
-import 'package:huynhcodaidaover2/repositories/photo_album_collection_repository.dart';
-
-import 'package:huynhcodaidaover2/services/router_service.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import '../models/banner.dart' as BannerModel;
+import '../models/photo_album_list_item.dart';
 import '../models/user_token.dart';
+import '../repositories/photo_album_collection_repository.dart';
+import 'banner_widget.dart';
 
 final GetIt getIt = GetIt.instance;
 
 class PhotoAlbumCollectionWidget extends StatefulWidget {
   final String actionUrl;
+
   const PhotoAlbumCollectionWidget({
     required this.actionUrl,
   });
@@ -40,12 +29,12 @@ class _PhotoAlbumCollectionWidgetState
       getIt.get<PhotoAlbumCollectionRepository>();
   final Box _appData = Hive.box('appData');
   final PagingController<int, PhotoAlbumListItem> _pagingController =
-  PagingController(firstPageKey: 1);
-  // List<PhotoAlbumListItem>? _photoAlbumListItems;
+      PagingController(firstPageKey: 1);
+
   BannerModel.Banner? _banner;
+
   @override
   void didUpdateWidget(covariant PhotoAlbumCollectionWidget oldWidget) {
-    // TODO: implement didUpdateWidget
     _fetchBanner();
     super.didUpdateWidget(oldWidget);
   }
@@ -62,101 +51,135 @@ class _PhotoAlbumCollectionWidgetState
   Future<void> _fetchBanner() async {
     final photoAlbumCollection =
         await _photoAlbumCollectionRepository.get(path: widget.actionUrl);
-    final photoAlbumList = photoAlbumCollection.photoAlbumList!.data;
-
     setState(() {
       _banner = photoAlbumCollection.banner;
-      // _photoAlbumListItems = photoAlbumList;
     });
   }
-  Future <void> _fetchPage(int pageKey) async{
-    try{
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
       final photoAlbumCollection =
-      await _photoAlbumCollectionRepository.get(path: widget.actionUrl);
+          await _photoAlbumCollectionRepository.get(path: widget.actionUrl);
       final photoAlbumList = photoAlbumCollection.photoAlbumList;
       final photoAlbumListData = photoAlbumCollection.photoAlbumList!.data;
-      final isLastPage = photoAlbumList!.to >= photoAlbumList.total;
-      if(photoAlbumList.nextPageUrl==null ||isLastPage){
-         _pagingController.appendLastPage(photoAlbumListData);
-      }else{
+      final isLastPage = photoAlbumList!.to <= photoAlbumList.total;
+      if (photoAlbumList.nextPageUrl == null || isLastPage) {
+        _pagingController.appendLastPage(photoAlbumListData);
+      } else {
         final nextPageKey = pageKey + 1;
         _pagingController.appendPage(photoAlbumListData, nextPageKey);
       }
-    }catch(e){
-
+    } catch (e) {
+      // Handle error
+      _pagingController.error = e;
     }
   }
+
   @override
   void dispose() {
+    _pagingController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Column(
-      children: [
-        if (_banner != null)
-          BannerWidget(
-            banner: _banner!,
-            margin: EdgeInsets.only(bottom: 16),
-            height: 140,
-          ),
-        Expanded(
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10.0, // Spacing between columns
-              mainAxisSpacing: 10.0,
+      child: Column(
+        children: [
+          if (_banner != null)
+            BannerWidget(
+              banner: _banner!,
+              margin: EdgeInsets.only(bottom: 16),
+              height: 140,
             ),
-            itemBuilder: (BuildContext context, int index) {
-              PhotoAlbumListItem _photoAlbumListItem =
-                  _photoAlbumListItems![index];
-              return GestureDetector(
-                onTap: () {},
-                child: Expanded(
+          Expanded(
+            child: PagedGridView<int, PhotoAlbumListItem>(
+              pagingController: _pagingController,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Number of columns in the grid
+                crossAxisSpacing: 15.0, // Spacing between columns
+                mainAxisSpacing: 25.0,
+                childAspectRatio: 0.7, // Spacing between rows
+              ),
+              builderDelegate: PagedChildBuilderDelegate<PhotoAlbumListItem>(
+                firstPageProgressIndicatorBuilder: (context) => _Loading,
+                newPageProgressIndicatorBuilder: (context) => _Loading,
+                itemBuilder: (BuildContext context, PhotoAlbumListItem item,
+                        int index) =>
+                    GestureDetector(
+                  onTap: () {
+                    // Handle item tap
+                  },
                   child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Colors.amber,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            spreadRadius: 2,
-                            offset: Offset(0, 4),
-                          )
-                        ]),
-                    child: Column(
-                      children: [
-                        _photoAlbumListItem.coverUrl == null
-                            ? Image.asset(
-                          'assets/default_menu_item_icon.png',
-                          width: 35,
-                          height: 35,
-                          fit: BoxFit.cover,
-                        )
-                            : CachedNetworkImage(
-                            httpHeaders: {
-                              'Authorization': 'Bearer ' +
-                                  (_appData.get('userToken') as UserToken)
-                                      .accessToken,
-                            },
-                            imageUrl: _photoAlbumListItem.coverUrl!
-                        )
-                      ],
+                    decoration: _Box_eachItem,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: item.coverUrl == null
+                                ? Image.asset(
+                                    'assets/default_menu_item_icon.png',
+                                    fit: BoxFit.cover,
+                                  )
+                                : CachedNetworkImage(
+                                    httpHeaders: {
+                                      'Authorization': 'Bearer ' +
+                                          (_appData.get('userToken')
+                                                  as UserToken)
+                                              .accessToken,
+                                    },
+                                    imageUrl: item.coverUrl!,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  ),
+                          ),
+                          Text('Hello')
+                          // Add more widgets for your grid item if necessary
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              );
-            },
+              ),
+            ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget get _Loading {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: CircularProgressIndicator(
+          color: Colors.orange,
+        ),
+      ),
+    );
+  }
+
+  BoxDecoration get _Box_eachItem {
+    return BoxDecoration(
+      color: Colors.white,
+      border: Border.all(
+        color: Colors.amber,
+        width: 2,
+      ),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black12,
+          blurRadius: 4,
+          spreadRadius: 2,
+          offset: Offset(0, 4),
         )
       ],
-    ));
+    );
   }
 }
