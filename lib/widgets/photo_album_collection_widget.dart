@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:flutter/material.dart';
@@ -17,6 +18,9 @@ import 'package:huynhcodaidaover2/widgets/loading_widget.dart';
 import 'package:huynhcodaidaover2/repositories/photo_album_collection_repository.dart';
 
 import 'package:huynhcodaidaover2/services/router_service.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
+import '../models/user_token.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -35,6 +39,9 @@ class _PhotoAlbumCollectionWidgetState
   final PhotoAlbumCollectionRepository _photoAlbumCollectionRepository =
       getIt.get<PhotoAlbumCollectionRepository>();
   final Box _appData = Hive.box('appData');
+  final PagingController<int, PhotoAlbumListItem> _pagingController =
+  PagingController(firstPageKey: 1);
+  // List<PhotoAlbumListItem>? _photoAlbumListItems;
   BannerModel.Banner? _banner;
   @override
   void didUpdateWidget(covariant PhotoAlbumCollectionWidget oldWidget) {
@@ -42,23 +49,43 @@ class _PhotoAlbumCollectionWidgetState
     _fetchBanner();
     super.didUpdateWidget(oldWidget);
   }
+
   @override
   void initState() {
     _fetchBanner();
-    print('The action Url is ${widget.actionUrl}');
-
-
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
     super.initState();
   }
 
   Future<void> _fetchBanner() async {
     final photoAlbumCollection =
         await _photoAlbumCollectionRepository.get(path: widget.actionUrl);
+    final photoAlbumList = photoAlbumCollection.photoAlbumList!.data;
+
     setState(() {
       _banner = photoAlbumCollection.banner;
+      // _photoAlbumListItems = photoAlbumList;
     });
   }
+  Future <void> _fetchPage(int pageKey) async{
+    try{
+      final photoAlbumCollection =
+      await _photoAlbumCollectionRepository.get(path: widget.actionUrl);
+      final photoAlbumList = photoAlbumCollection.photoAlbumList;
+      final photoAlbumListData = photoAlbumCollection.photoAlbumList!.data;
+      final isLastPage = photoAlbumList!.to >= photoAlbumList.total;
+      if(photoAlbumList.nextPageUrl==null ||isLastPage){
+         _pagingController.appendLastPage(photoAlbumListData);
+      }else{
+        final nextPageKey = pageKey + 1;
+        _pagingController.appendPage(photoAlbumListData, nextPageKey);
+      }
+    }catch(e){
 
+    }
+  }
   @override
   void dispose() {
     super.dispose();
@@ -75,7 +102,60 @@ class _PhotoAlbumCollectionWidgetState
             margin: EdgeInsets.only(bottom: 16),
             height: 140,
           ),
-        Text('This is the album')
+        Expanded(
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10.0, // Spacing between columns
+              mainAxisSpacing: 10.0,
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              PhotoAlbumListItem _photoAlbumListItem =
+                  _photoAlbumListItems![index];
+              return GestureDetector(
+                onTap: () {},
+                child: Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Colors.amber,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            spreadRadius: 2,
+                            offset: Offset(0, 4),
+                          )
+                        ]),
+                    child: Column(
+                      children: [
+                        _photoAlbumListItem.coverUrl == null
+                            ? Image.asset(
+                          'assets/default_menu_item_icon.png',
+                          width: 35,
+                          height: 35,
+                          fit: BoxFit.cover,
+                        )
+                            : CachedNetworkImage(
+                            httpHeaders: {
+                              'Authorization': 'Bearer ' +
+                                  (_appData.get('userToken') as UserToken)
+                                      .accessToken,
+                            },
+                            imageUrl: _photoAlbumListItem.coverUrl!
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        )
       ],
     ));
   }
