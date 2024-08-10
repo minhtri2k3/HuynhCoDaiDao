@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:huynhcodaidaover2/blocs/audio_controller_state.dart';
-import 'package:huynhcodaidaover2/blocs/audio_controller_bloc.dart';
-
-import 'package:huynhcodaidaover2/ui_components/linear_gradients.dart';
-
-import 'package:huynhcodaidaover2/widgets/app_bar_02_widget.dart';
+import '../blocs/audio_controller_bloc.dart';
+import '../blocs/audio_controller_state.dart';
+import '../ui_components/linear_gradients.dart';
+import '../widgets/app_bar_02_widget.dart';
 class BaseScreen extends StatelessWidget {
   final String title;
   final Widget body;

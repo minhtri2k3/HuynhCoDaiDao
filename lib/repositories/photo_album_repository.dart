@@ -1,11 +1,9 @@
 import 'package:get_it/get_it.dart';
-import 'package:meta/meta.dart';
 import 'package:hive/hive.dart';
 
-import 'package:huynhcodaidaover2/models/user_token.dart';
-import 'package:huynhcodaidaover2/models/photo_album.dart';
-
-import 'package:huynhcodaidaover2/services/photo_album_service.dart';
+import '../models/photo_album.dart';
+import '../models/user_token.dart';
+import '../services/photo_album_service.dart';
 
 final GetIt getIt = GetIt.instance;
 

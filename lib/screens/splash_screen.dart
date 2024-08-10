@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:huynhcodaidaover2/ui_components/linear_gradients.dart';
+import '../ui_components/linear_gradients.dart';
 
 import '../ui_components/linear_gradients.dart';
 

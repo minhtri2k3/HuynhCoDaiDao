@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'package:huynhcodaidaover2/screens/base_screen.dart';
-
-import 'package:huynhcodaidaover2/widgets/photo_album_widget.dart';
-
 import '../widgets/photo_album_widget.dart';
+
+import 'base_screen.dart';
 
 class PhotoAlbumScreen extends StatelessWidget {
   final String actionTitle;
