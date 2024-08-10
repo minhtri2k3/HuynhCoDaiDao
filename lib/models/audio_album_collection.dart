@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:huynhcodaidaover2/models/banner.dart';
-import 'package:huynhcodaidaover2/models/audio_album_list.dart';
+import 'audio_album_list.dart';
+import 'banner.dart';
 
 part 'audio_album_collection.g.dart';
 

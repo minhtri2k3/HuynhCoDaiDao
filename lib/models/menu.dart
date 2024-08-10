@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:huynhcodaidaover2/models/banner.dart';
-import 'package:huynhcodaidaover2/models/menu_item_list.dart';
+import 'banner.dart';
+import 'menu_item_list.dart';
 
 part 'menu.g.dart';
 

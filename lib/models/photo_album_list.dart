@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:huynhcodaidaover2/models/photo_album_list_item.dart';
+import 'photo_album_list_item.dart';
 
 part 'photo_album_list.g.dart';
 

@@ -134,7 +134,7 @@ class _PhotoAlbumCollectionWidgetState
                                     width: double.infinity,
                                     height: double.infinity,
                                     placeholder: (context, url) =>
-                                        CircularProgressIndicator(),
+                                        _Loading,
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
                                   ),
@@ -164,7 +164,6 @@ class _PhotoAlbumCollectionWidgetState
       ),
     );
   }
-
   BoxDecoration get _Box_eachItem {
     return BoxDecoration(
       color: Colors.white,
@@ -182,4 +181,5 @@ class _PhotoAlbumCollectionWidgetState
       ],
     );
   }
+
 }

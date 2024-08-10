@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:huynhcodaidaover2/models/audio_album_list_item.dart';
+import 'audio_album_list_item.dart';
 
 part 'audio_album_list.g.dart';
 

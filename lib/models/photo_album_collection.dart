@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:huynhcodaidaover2/models/banner.dart';
-import 'package:huynhcodaidaover2/models/photo_album_list.dart';
+import 'banner.dart';
+import 'photo_album_list.dart';
 
 part 'photo_album_collection.g.dart';
 
