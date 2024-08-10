@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:huynhcodaidaover2/models/banner.dart';
-import 'package:huynhcodaidaover2/modules/message/message_list.dart';
-import 'package:huynhcodaidaover2/modules/message/message_style.dart';
+import '../../models/banner.dart';
+import 'message_list.dart';
+import 'message_style.dart';
 
 part 'message_category.g.dart';
 

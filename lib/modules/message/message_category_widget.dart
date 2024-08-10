@@ -1,25 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:get_it/get_it.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
-
-import 'package:huynhcodaidaover2/modules/message/message.dart';
-import 'package:huynhcodaidaover2/modules/message/message_list.dart';
-import 'package:huynhcodaidaover2/modules/message/message_category.dart';
-import 'package:huynhcodaidaover2/models/banner.dart' as BannerModel;
-
-import 'package:huynhcodaidaover2/widgets/network_image_widget.dart';
-import 'package:huynhcodaidaover2/widgets/banner_widget.dart';
-import 'package:huynhcodaidaover2/widgets/loading_widget.dart';
-import 'package:huynhcodaidaover2/widgets/label_widget.dart';
-
-import 'package:huynhcodaidaover2/modules/message/message_category_repository.dart';
-import 'package:huynhcodaidaover2/services/router_service.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import '../../models/banner.dart' as BannerModel;
 import '../../models/user_token.dart';
+import '../../widgets/banner_widget.dart';
+import 'message.dart';
+import 'message_category_repository.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -156,9 +145,7 @@ class _MessageCategoryWidgetState extends State<MessageCategoryWidget> {
                                         imageUrl: item.customStyle!.primaryIconUrl!,
                                         placeholder: (context, url) => CircleAvatar(
                                           backgroundColor: Colors.grey,
-                                          child: CircularProgressIndicator(
-                                            color: Colors.orange,
-                                          ), // Spinner while loading
+                                          child: _Loading // Spinner while loading
                                         ),
                                         errorWidget: (context, url, error) =>
                                             CircleAvatar(
@@ -220,4 +207,5 @@ class _MessageCategoryWidgetState extends State<MessageCategoryWidget> {
       ),
     );
   }
+
 }

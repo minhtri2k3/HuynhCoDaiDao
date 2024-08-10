@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:huynhcodaidaover2/modules/message/message_style.dart';
+import 'message_style.dart';
 
 part 'message.g.dart';
 

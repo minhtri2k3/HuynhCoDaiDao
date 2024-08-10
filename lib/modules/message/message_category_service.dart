@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'package:huynhcodaidaover2/modules/message/message_category.dart';
+import 'message_category.dart';
 
 part 'message_category_service.g.dart';
 
