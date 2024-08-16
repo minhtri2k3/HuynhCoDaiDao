@@ -1,66 +1,44 @@
 import 'dart:convert';
 
+import 'package:device_preview/device_preview.dart';
 import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get_it/get_it.dart';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart' as Services;
 import 'package:flutter/material.dart' hide Router;
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:device_preview/device_preview.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart' as Services;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:huynhcodaidaover2/models/user_token.dart';
-
-import 'package:huynhcodaidaover2/blocs/global_bloc_observer.dart';
-import 'package:huynhcodaidaover2/blocs/authentication_event.dart';
-import 'package:huynhcodaidaover2/blocs/authentication_state.dart';
-import 'package:huynhcodaidaover2/blocs/authentication_bloc.dart';
-import 'package:huynhcodaidaover2/blocs/login_screen_bloc.dart';
-import 'package:huynhcodaidaover2/blocs/audio_controller_event.dart';
-import 'package:huynhcodaidaover2/blocs/audio_controller_bloc.dart';
-
-import 'package:huynhcodaidaover2/repositories/user_repository.dart';
-import 'package:huynhcodaidaover2/repositories/menu_repository.dart';
-import 'package:huynhcodaidaover2/repositories/photo_album_collection_repository.dart';
-import 'package:huynhcodaidaover2/repositories/audio_album_collection_repository.dart';
-import 'package:huynhcodaidaover2/repositories/photo_album_repository.dart';
-import 'package:huynhcodaidaover2/repositories/audio_album_repository.dart';
-
-import 'package:huynhcodaidaover2/services/user_service.dart';
-import 'package:huynhcodaidaover2/services/menu_service.dart';
-import 'package:huynhcodaidaover2/services/photo_album_collection_service.dart';
-import 'package:huynhcodaidaover2/services/audio_album_collection_service.dart';
-import 'package:huynhcodaidaover2/services/photo_album_service.dart';
-import 'package:huynhcodaidaover2/services/audio_album_service.dart';
-
-import 'package:huynhcodaidaover2/screens/splash_screen.dart';
-import 'package:huynhcodaidaover2/screens/login_screen.dart';
-import 'package:huynhcodaidaover2/screens/home_screen.dart';
-import 'package:huynhcodaidaover2/screens/menu_screen.dart';
-import 'package:huynhcodaidaover2/screens/webview_screen.dart';
-import 'package:huynhcodaidaover2/screens/photo_album_collection_screen.dart';
-import 'package:huynhcodaidaover2/screens/audio_album_collection_screen.dart';
-import 'package:huynhcodaidaover2/screens/photo_album_screen.dart';
-import 'package:huynhcodaidaover2/screens/audio_album_screen.dart';
-
-import 'package:huynhcodaidaover2/modules/message/message_category_repository.dart';
-import 'package:huynhcodaidaover2/modules/message/message_category_service.dart';
-import 'package:huynhcodaidaover2/modules/message/message_category_screen.dart';
-
-import 'package:huynhcodaidaover2/screens/pdf_view_screen.dart';
-
-import 'package:onesignal_flutter/onesignal_flutter.dart';
-
-import 'widgets/menu_widget.dart';
+import 'blocs/audio_controller_bloc.dart';
+import 'blocs/audio_controller_event.dart';
+import 'blocs/authentication_bloc.dart';
+import 'blocs/authentication_event.dart';
+import 'blocs/authentication_state.dart';
+import 'blocs/global_bloc_observer.dart';
+import 'blocs/login_screen_bloc.dart';
+import 'models/user_token.dart';
+import 'modules/message/message_category_repository.dart';
+import 'modules/message/message_category_screen.dart';
+import 'modules/message/message_category_service.dart';
+import 'repositories/audio_album_collection_repository.dart';
+import 'repositories/audio_album_repository.dart';
+import 'repositories/menu_repository.dart';
+import 'repositories/photo_album_collection_repository.dart';
+import 'repositories/photo_album_repository.dart';
+import 'repositories/user_repository.dart';
+import 'screens/home_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/menu_screen.dart';
+import 'screens/photo_album_collection_screen.dart';
+import 'screens/splash_screen.dart';
+import 'services/audio_album_collection_service.dart';
+import 'services/audio_album_service.dart';
+import 'services/menu_service.dart';
+import 'services/photo_album_collection_service.dart';
+import 'services/photo_album_service.dart';
+import 'services/user_service.dart';
 
 final GetIt getIt = GetIt.instance;
 
