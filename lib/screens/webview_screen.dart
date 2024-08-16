@@ -22,12 +22,15 @@ class WebviewScreen extends StatefulWidget {
   @override
   _WebviewScreenState createState() => _WebviewScreenState();
 }
-
+/**
+ * 
+ */
+///
 class _WebviewScreenState extends State<WebviewScreen> {
   final Box _appData = Hive.box('appData');
 
   late WebViewController _webviewController;
-
+  
   @override
   Widget build(BuildContext context) {
     return BaseScreen(

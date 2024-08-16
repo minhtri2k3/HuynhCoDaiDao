@@ -3,6 +3,14 @@ import '../ui_components/linear_gradients.dart';
 
 import '../ui_components/linear_gradients.dart';
 
+///
+/// SplashScreen
+///   - The first screen that appears when the app is launched
+///  - Displays the app logo
+/// - Contains a gradient background
+///  - The logo is centered on the screen
+/// 
+
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
