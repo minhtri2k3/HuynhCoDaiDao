@@ -41,7 +41,8 @@ import 'services/photo_album_service.dart';
 import 'services/user_service.dart';
 
 final GetIt getIt = GetIt.instance;
-
+/// Setup the GetIt service locator
+/// - Registers the services and repositories
 Future<void> setupGetIt() async {
   getIt.registerLazySingleton<FlutterSecureStorage>(
       () => FlutterSecureStorage());
